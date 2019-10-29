@@ -1,0 +1,16 @@
+[
+ {
+   "modid": "multiblocktest",
+   "name": "MultiBlock Test",
+   "description": "A mod to test some MultiBlock ideas",
+   "version": "${version}",
+   "mcversion": "${mcversion}",
+   "url": "https://github.com/dshadowwolf/multiblock-test",
+   "updateUrl": "",
+   "authorList": ["jriwanek", "dshadowwolf"],
+   "credits": "",
+   "logoFile": "",
+   "screenshots": [],
+   "dependencies": []
+ }
+]
