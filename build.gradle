@@ -303,7 +303,7 @@ dependencies {
     annotationProcessor group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.0'
   }
   
-  deobfProvided("com.mcmoddev:MMDLib:${mc_version}-${mmdlib_version}")
+  deobfProvided("com.mcmoddev:MMDLib:1.12-${mmdlib_version}")
 }
 
 processResources {

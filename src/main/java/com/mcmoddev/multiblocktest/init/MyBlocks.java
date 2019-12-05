@@ -10,12 +10,12 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  *
  */
 @GameRegistry.ObjectHolder(MultiBlockTest.MODID)
-public final class ExampleModBlocks {
+public final class MyBlocks {
 
 	/**
 	 *
 	 */
-	private ExampleModBlocks() {
+	private MyBlocks() {
 		//
 	}
 
