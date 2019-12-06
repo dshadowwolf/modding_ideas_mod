@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import com.mcmoddev.multiblocktest.MultiBlockTest;
 import com.mcmoddev.multiblocktest.init.MyBlocks;
+import com.mcmoddev.multiblocktest.blocks.CapacitorBankBase;
 
 @EventBusSubscriber(modid = MultiBlockTest.MODID)
 public class EventHandler {
@@ -26,13 +27,17 @@ public class EventHandler {
 	
     @SubscribeEvent
     public static void registerItems(final RegistryEvent.Register<Item> event) {
-    	event.getRegistry().register(new ItemBlock(MyBlocks.CAPACITOR_BANK).setRegistryName(MyBlocks.CAPACITOR_BANK.getRegistryName()));
+    	for( Block cap: MyBlocks.capacitors) {
+    		event.getRegistry().register(new ItemBlock(cap).setRegistryName(cap.getRegistryName()));
+    	}
     }
     
     @SubscribeEvent
     public static void registerBlocks(final RegistryEvent.Register<Block> event) {
-    	event.getRegistry().register(MyBlocks.CAPACITOR_BANK);
-    	((MMDBlockWithTile)MyBlocks.CAPACITOR_BANK).registerTile();
+    	for( Block cap: MyBlocks.capacitors) {
+    		event.getRegistry().register(cap);
+    		((MMDBlockWithTile)cap).registerTile();
+    	}
     }
 
     @SubscribeEvent
@@ -42,7 +47,9 @@ public class EventHandler {
     
     @SubscribeEvent
     public static void registerMMDLibBlocks(final MMDLibRegisterBlocks event) {
-    	com.mcmoddev.lib.init.Materials.DEFAULT.addNewBlock("Capacitor Bank", MyBlocks.CAPACITOR_BANK);
+    	for( Block cap: MyBlocks.capacitors) {
+        	com.mcmoddev.lib.init.Materials.DEFAULT.addNewBlock(cap.getRegistryName().getPath(), cap);
+    	}
     }
 
     @SubscribeEvent

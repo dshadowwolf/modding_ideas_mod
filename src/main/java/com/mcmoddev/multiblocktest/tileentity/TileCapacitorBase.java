@@ -10,27 +10,28 @@ import com.mcmoddev.lib.tile.MMDStandardTileEntity;
 import com.mcmoddev.multiblocktest.features.SimpleCapacitorFeature;
 import com.mcmoddev.lib.energy.ForgeEnergyStorage;
 
-public class TileCapacitor extends MMDStandardTileEntity {
+public class TileCapacitorBase extends MMDStandardTileEntity {
 	public static final int DEFAULT_CAPACITY = 50000;
 	public static final int DEFAULT_RATE = 5000;
 	protected final ForgeEnergyStorage buffer;
 	
-	public TileCapacitor() {
+	public TileCapacitorBase() {
 		this(DEFAULT_CAPACITY);
 	}
 	
-	public TileCapacitor(final int capacity) {
+	public TileCapacitorBase(final int capacity) {
 		this(capacity, DEFAULT_RATE);
 	}
 	
-	public TileCapacitor(final int capacity, final int iorate) {
+	public TileCapacitorBase(final int capacity, final int iorate) {
+		this(capacity, iorate, iorate);
+	}
+	
+	public TileCapacitorBase(final int capacity, final int inputRate, final int outputRate) {
 		super();
 		
-		this.buffer = this.addFeature(new SimpleCapacitorFeature("battery", 0, capacity, iorate, iorate, this))
-		.getEnergyStorage();
-		buffer.setInputRate(iorate);
-		buffer.setoutputRate(iorate);
-
+		this.buffer = this.addFeature(new SimpleCapacitorFeature("battery", 0, capacity, inputRate, outputRate, this))
+				.getEnergyStorage();
 	}
 	
     @Override
@@ -42,9 +43,9 @@ public class TileCapacitor extends MMDStandardTileEntity {
 
 	public IWidgetGui getContentWidgetGui(final GuiContext context) {
         return new GridLayout(9, 3)
-                .addPiece(new LabelWidgetGui("This Is A Placeholder"), 4, 0, 4, 1)
-                .addPiece(new LabelWidgetGui(String.format("Input Rate: %d FE/t", buffer.getInputRate())), 4, 1, 4, 1)
-                .addPiece(new LabelWidgetGui(String.format("Output Rate: %d FE/t", buffer.getOutputRate())), 4, 2, 4, 1);
+                .addPiece(new LabelWidgetGui("This Is A Placeholder"), 1, 0, 4, 1)
+                .addPiece(new LabelWidgetGui(String.format("Input Rate: %d FE/t", buffer.getInputRate())), 1, 1, 4, 1)
+                .addPiece(new LabelWidgetGui(String.format("Output Rate: %d FE/t", buffer.getOutputRate())), 1, 2, 4, 1);
 	}
 	
 }
