@@ -1,5 +1,5 @@
 # eclipse
-bin
+Bin
 *.launch
 .settings
 .settings/*
@@ -17,6 +17,7 @@ out
 # gradle
 build
 .gradle
+.gradle/*
 
 # other
 eclipse
