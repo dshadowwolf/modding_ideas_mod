@@ -1,9 +1,10 @@
 package com.mcmoddev.multiblocktest.init;
 
 import com.mcmoddev.multiblocktest.MultiBlockTest;
+import com.mcmoddev.multiblocktest.blocks.CapacitorBank;
 
 import net.minecraft.block.Block;
-
+import net.minecraft.block.material.Material;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
@@ -22,10 +23,5 @@ public final class MyBlocks {
 	/**
 	 *
 	 */
-    public static final Block EXAMPLE_BLOCK = null;
-
-	/**
-	 *
-	 */
-	public static final Block EXAMPLE_FLUID = null;
+    public static final Block CAPACITOR_BANK = new CapacitorBank(Material.IRON);
 }
