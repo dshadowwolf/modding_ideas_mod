@@ -5,6 +5,7 @@ import com.mcmoddev.multiblocktest.MultiBlockTest;
 import com.mcmoddev.multiblocktest.tileentity.TileCapacitorMassive;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 
 public class CapacitorBankMassive extends MMDBlockWithTile<TileCapacitorMassive> {
@@ -12,6 +13,16 @@ public class CapacitorBankMassive extends MMDBlockWithTile<TileCapacitorMassive>
 		super(TileCapacitorMassive.class, TileCapacitorMassive::new, material);
 		setTranslationKey(MultiBlockTest.MODID + "." + "massive_capacitor_bank");
 		setRegistryName(new ResourceLocation(MultiBlockTest.MODID, "massive_capacitor_bank"));
+	}
+	
+	@Override
+	public boolean isFullCube(IBlockState blockStateIn) {
+		return false; 
+	}
+	
+	@Override
+	public boolean isOpaqueCube(IBlockState blockStateIn) {
+		return false;
 	}
 
 }

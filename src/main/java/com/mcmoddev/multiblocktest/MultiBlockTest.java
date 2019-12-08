@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.mcmoddev.multiblocktest.proxy.Proxy;
+import com.mcmoddev.multiblocktest.util.MultiBlockTestConfig;
 
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Mod;
@@ -54,7 +55,7 @@ public final class MultiBlockTest {
 	/**
 	 *
 	 */
-	public static final Logger LOGGER = LogManager.getLogger(MultiBlockTest.MODID);
+	public static final Logger LOGGER = LogManager.getFormatterLogger(MultiBlockTest.MODID);
 
 	/**
 	 *
@@ -102,6 +103,7 @@ public final class MultiBlockTest {
 	public static void preInit(final FMLPreInitializationEvent event) {
 		// Instead of setting the logger above, you can set it like this instead.
 		// logger = event.getModLog()
+		MultiBlockTestConfig.init();
 		proxy.preInit(event);
 	}
 

@@ -1,0 +1,11 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "multiblocktest:advanced_capacitor_bank.obj",
+		"textures": { "particle": "multiblocktest:advanced_capacitor_bank" }
+	},
+    "variants": {
+        "normal": [{ }],
+		"inventory": [{ "transform": "forge:default-block"}]
+    }
+}

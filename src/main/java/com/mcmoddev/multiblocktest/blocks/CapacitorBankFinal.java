@@ -5,6 +5,7 @@ import com.mcmoddev.multiblocktest.MultiBlockTest;
 import com.mcmoddev.multiblocktest.tileentity.TileCapacitorFinal;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
 
 public class CapacitorBankFinal extends MMDBlockWithTile<TileCapacitorFinal> {
@@ -12,5 +13,15 @@ public class CapacitorBankFinal extends MMDBlockWithTile<TileCapacitorFinal> {
 		super(TileCapacitorFinal.class, TileCapacitorFinal::new, material);
 		setTranslationKey(MultiBlockTest.MODID + "." + "final_capacitor_bank");
 		setRegistryName(new ResourceLocation(MultiBlockTest.MODID, "final_capacitor_bank"));
+	}
+	
+	@Override
+	public boolean isFullCube(IBlockState blockStateIn) {
+		return false; 
+	}
+	
+	@Override
+	public boolean isOpaqueCube(IBlockState blockStateIn) {
+		return false;
 	}
 }

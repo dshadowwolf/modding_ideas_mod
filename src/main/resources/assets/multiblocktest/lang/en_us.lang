@@ -1,3 +1,4 @@
-item.examplemod.example_item.name=Example Item
-tile.examplemod.example_block.name=Example Block
-tile.examplemod.example_fluid.name=Example Fluid
+tile.multiblocktest.basic_capacitor_bank.name=Basic Capacitor Bank
+tile.multiblocktest.advanced_capacitor_bank.name=Advanced Capacitor Bank
+tile.multiblocktest.massive_capacitor_bank.name=Supercapacitor Bank
+tile.multiblocktest.final_capacitor_bank.name=Ultracapacitor Bank
