@@ -1,19 +1,23 @@
 package com.mcmoddev.multiblocktest.util;
 
 import java.util.ArrayDeque;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.commons.lang3.tuple.MutableTriple;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 public abstract class MultiBlockStructure implements IMultiBlockStructure {
@@ -132,4 +136,22 @@ public abstract class MultiBlockStructure implements IMultiBlockStructure {
         maxPos = max;
         return Pair.of(min,max);
     }
+
+	/**
+	 * Called after we're mostly setup (ie: we've detected that we're valid) this returns a list of the blocks
+	 * in the interior of the multiblock and their positions.
+	 * 
+	 * @param worldIn - World used for block access
+	 * @return List of Pair<BlockPos, IBlockState> describing the blocks in the interior and their contents
+	 */
+	@Override
+	public List<Pair<BlockPos, IBlockState>> getContents(World worldIn) {
+		if (minPos != null && maxPos != null) {
+			List<Pair<BlockPos, IBlockState>> rv = new LinkedList<>();
+			Vec3i addSub = new Vec3i(1,1,1);
+			BlockPos.getAllInBox(minPos.add(addSub), maxPos.subtract(addSub)).forEach(pos -> rv.add(Pair.of(pos, worldIn.getBlockState(pos))));
+			return rv.stream().filter(pp -> pp.getRight().getBlock() != null && pp.getRight().getBlock() != Blocks.AIR).collect(Collectors.toList());
+		}
+		return Collections.<Pair<BlockPos,IBlockState>>emptyList();
+	}
 }
