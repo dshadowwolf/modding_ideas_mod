@@ -21,17 +21,16 @@ public abstract class MultiBlockStructure implements IMultiBlockStructure {
 	private final int xWidth;
 	private final int zWidth;
 	private final int height;
-	private List<IBlockState> validBlocks;
-	private MutableTriple<Integer,Integer,Integer> detected;
+	private final List<IBlockState> validBlocks = new LinkedList<>();
+	private final MutableTriple<Integer,Integer,Integer> detected = MutableTriple.of(0, 0, 0);
+	private BlockPos minPos = new BlockPos(0,0,0);
+	private BlockPos maxPos = new BlockPos(0,0,0);
 	
 	public MultiBlockStructure(int xWidth, int zWidth, int height, List<IBlockState> validBlocks) {
 		this.xWidth = xWidth;
 		this.zWidth = zWidth;
 		this.height = height;
 		this.validBlocks.addAll(validBlocks);
-		detected.left = 0;
-		detected.right = 0;
-		detected.middle = 0;
 	}
 
 	/**
@@ -56,7 +55,7 @@ public abstract class MultiBlockStructure implements IMultiBlockStructure {
 	 * @return Is the multiblock valid ?
 	 */
 	abstract boolean isValidMultiblock(IBlockState origin);
-	
+
 	/**
 	 * Assuming a cuboid multiblock this will first seek out the actual extents of the possible structure,
 	 * then walk the blocks in that region. If it finds only valid blocks, it will return true, otherwise it will
@@ -124,7 +123,13 @@ public abstract class MultiBlockStructure implements IMultiBlockStructure {
                 }
             }
         }
-
+        
+        detected.left = Math.abs(max.getX() - min.getX());
+        detected.middle = Math.abs(max.getY() - min.getY());
+        detected.right = Math.abs(max.getZ() - min.getZ());
+        
+        minPos = min;
+        maxPos = max;
         return Pair.of(min,max);
     }
 }

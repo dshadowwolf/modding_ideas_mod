@@ -8,4 +8,5 @@ import net.minecraft.world.World;
 public interface IMultiBlockStructure {
 	public boolean detectMultiblock(BlockPos base, World worldIn);
 	public Pair<BlockPos, BlockPos> findLimits(BlockPos base, World worldIn);
+	public List<Pair<BlockPos, IBlockState>> getContents(World worldIn);
 }
