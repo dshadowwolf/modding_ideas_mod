@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -61,11 +62,62 @@ public abstract class MultiBlockStructure implements IMultiBlockStructure {
 	
 	/**
 	 * Is the controller placed as part of a valid multiblock ?
+	 * This is the recommended path at this time...
 	 * @param origin The multiblock controller
 	 * @return Is the multiblock valid ?
 	 */
-	abstract boolean isValidMultiblock(IBlockState origin);
+	abstract public boolean isValidMultiblock();
+	
+	/**
+	 * Is the controller placed as part of a valid multiblock ?
+	 * @param origin The multiblock controller
+	 * @return Is the multiblock valid ?
+	 */
+	public boolean isValidMultiblock(IBlockState origin) {
+		return checkMultiblockStructure(origin);
+	}
 
+	/**
+	 * Is the controller placed as part of a valid multiblock ?
+	 * Uses the more rigid structure style...
+	 * @param origin The multiblock controller
+	 * @return Is the multiblock valid ?
+	 */
+	public boolean isValidMultiblock(IBlockState origin, Map<Vec3i, IBlockState> structure) {
+		return checkMultiblockStructure(origin, structure);
+	}
+	
+	/**
+	 * Check the structure of the multiblock. This should be called from within the isValidMultiblock function
+	 * 
+	 * @param IBlockState origin - originating block 
+	 * @param Map<Vec3i, IBlockState> structure - a Map of what blocks should be in which position of the multiblock
+	 * @return Does the multiblock conform to the specified structure ?
+	 */
+	protected boolean checkMultiblockStructure(IBlockState origin, Map<Vec3i, IBlockState> structure) { return true; }
+
+	/**
+	 * Is the controller placed as part of a valid multiblock ?
+	 * This is the recommended path...
+	 * @return Is the multiblock valid ?
+	 */
+	abstract protected boolean checkMultiblockStructure();
+
+	/**
+	 * Same as checkStructure(Map<>) but allows for a less rigid definition
+	 * 
+	 * @param IBlockState origin - originating block 
+	 * @return Does the multiblock conform to the specified structure ?
+	 */
+	protected boolean checkMultiblockStructure(IBlockState origin) { return true; }
+	
+	/**
+	 * Find and return a list of all Tile Entities that are part of the multiblock. This will include the
+	 * controller that is actually trying to form the multiblock. This is so the system can find the various
+	 * input and output parts.
+	 * 
+	 * @return List<TileEntity> -- a list of all Tile Entities found within the structure
+	 */
 	@Override
 	public List<TileEntity> getTiles() {
 		if (minPos != null && maxPos != null) {
