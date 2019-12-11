@@ -145,6 +145,12 @@ public abstract class MultiBlockStructure implements IMultiBlockStructure {
 	 */
 	@Override
 	public List<TileEntity> getTiles() {
+		// Okay, this probably looks a bit odd and scary, so lets explain...
+		// the outermost code (the if statement and terminal return) is part of an error-check
+		// the inner return uses a small feature from the Java Collections system to turn the
+		// Iterator<BlockPos> that we start with into a stream, then converts it to a set of
+		// either null's or Tile Entities, before filtering out the null's and collecting
+		// everything into the List<TileEntity> that is needed for a return to the user.
 		if (minPos != null && maxPos != null) {
 			return StreamSupport.stream(BlockPos.getAllInBox(minPos, maxPos).spliterator(), false)
 					.map(p -> world.getTileEntity(p))
@@ -234,11 +240,15 @@ public abstract class MultiBlockStructure implements IMultiBlockStructure {
 	 * Called after we're mostly setup (ie: we've detected that we're valid) this returns a list of the blocks
 	 * in the interior of the multiblock and their positions.
 	 * 
-	 * @param worldIn - World used for block access
 	 * @return List of Pair<BlockPos, IBlockState> describing the blocks in the interior and their contents
 	 */
 	@Override
 	public List<Pair<BlockPos, IBlockState>> getContents() {
+		// Okay, this probably looks rather familiar - it is the same basic logic as getTiles()
+		// but instead of just mapping the BlockPos values to a TileEntity and filtering out null's
+		// this maps things to a 2-Tuple (a Pair) of values, the BlockPos and the IBlockState for the block
+		// at that position. The filter is there solely because I'm uncertain of whether BlockPos.getAllInBox()
+		// will return a BlockPos for net.minecraft.init.Blocks.AIR or not.
 		if (minPos != null && maxPos != null) {
 			Vec3i addSub = new Vec3i(1,1,1);
 			return StreamSupport.stream(BlockPos.getAllInBox(minPos.add(addSub), maxPos.subtract(addSub)).spliterator(), false)
@@ -247,5 +257,22 @@ public abstract class MultiBlockStructure implements IMultiBlockStructure {
 					.collect(Collectors.toList());
 		}
 		return Collections.<Pair<BlockPos,IBlockState>>emptyList();
+	}
+	
+	/**
+	 * Get all possible blocks that could be part of the multiblock
+	 * 
+	 * @return Map<BlockPos, IBlockState> of the contents
+	 */
+	@Override
+	public List<Pair<BlockPos, IBlockState>> getStructure() {
+		// see public List<> getContents() for a description of how this works
+		if (minPos != null && maxPos != null) {
+			return StreamSupport.stream(BlockPos.getAllInBox(minPos, maxPos).spliterator(), false)
+					.map(pos -> Pair.of(pos, world.getBlockState(pos)))
+					.filter(p -> p.getRight() != null && p.getRight().getBlock() != null)
+					.collect(Collectors.toList());
+		}
+		return Collections.<Pair<BlockPos, IBlockState>>emptyList();
 	}
 }

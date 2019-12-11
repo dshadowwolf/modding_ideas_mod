@@ -12,6 +12,7 @@ public interface IMultiBlockStructure {
 	public boolean detectMultiblock();
 	public Pair<BlockPos, BlockPos> findLimits();
 	public List<Pair<BlockPos, IBlockState>> getContents();
+	public List<Pair<BlockPos, IBlockState>> getStructure();
 	public List<TileEntity> getTiles();
 	public boolean form();
 }
