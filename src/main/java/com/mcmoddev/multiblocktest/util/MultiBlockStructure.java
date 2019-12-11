@@ -13,7 +13,6 @@ import java.util.stream.StreamSupport;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
-
 import org.apache.commons.lang3.tuple.MutableTriple;
 
 import net.minecraft.block.state.IBlockState;
@@ -23,25 +22,51 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
+/**
+ * Meant as a container to hold the logic for detecting the validity of a multiblock and handling some bits of interaction with the world.
+ * The constructor is about as simple as I've been able to make it and I've tried to provide sane defaults for most functions, though the
+ * overloads provided for isMultiblockValid() and checkStructure() need to be overridden - I'd have left them abstract, but decided to
+ * not hobble implementors with needing to write the extra code there.
+ * 
+ * @author Daniel Hazelton <dshadowwolf@gmail.com>
+ * @since 1-DEC-2019
+ * @version 1.0
+ * @implNote Version 1.0 of this code is wholly independent of anything except Minecraft and the Apache Commons - future versions will, likely, tie into MMDLib
+ */
 public abstract class MultiBlockStructure implements IMultiBlockStructure {
 
-	private final int xWidth;
-	private final int zWidth;
-	private final int height;
-	private final List<IBlockState> validBlocks = new LinkedList<>();
-	private final MutableTriple<Integer,Integer,Integer> detected = MutableTriple.of(0, 0, 0);
-	private BlockPos minPos = new BlockPos(0,0,0);
-	private BlockPos maxPos = new BlockPos(0,0,0);
-	private BlockPos origin;
-	private World world;
+	/* these should be a small, fixed value - perhaps even clamped to, say, no more than 128... */
+	private final int xWidth; // maximum x size of the structure
+	private final int zWidth; // maximum z size of the structure
+	private final int height; // maximum height of the structure
 	
+	private final List<IBlockState> validBlocks = new LinkedList<>(); // list of blocks that make up a valid structure
+	
+	// detected size of the structure
+	private final MutableTriple<Integer,Integer,Integer> detected = MutableTriple.of(0, 0, 0);
+	
+	/*
+	 *  the two values are used to get both just the center contents of the multiblock - if such is important to the multiblock itself -
+	 *  and to get the entire multiblock overall, which should be used as part of determining if the structure is valid.
+	 */
+	private BlockPos minPos = new BlockPos(0,0,0); // maximum position of contiguous valid blocks
+	private BlockPos maxPos = new BlockPos(0,0,0); // minimum position of contiguous valid blocks
+	
+	private BlockPos origin; // position of the TE/Block in the world that has created this instance to attempt to form a multiblock
+	private World world; // IWorldAccess more than anything - without this we'd be unable to actually get the blocks or blockstates
+
+	// basic constructor - takes all non-calculable important values as parameters.
 	public MultiBlockStructure(BlockPos origin, World worldIn, int xWidth, int zWidth, int height, List<IBlockState> validBlocks) {
+		// setup the values we get as parameters...
 		this.origin = origin;
 		this.world = worldIn;
 		this.xWidth = xWidth;
 		this.zWidth = zWidth;
 		this.height = height;
 		this.validBlocks.addAll(validBlocks);
+		
+		// setup most of the rest
+		findLimits();
 	}
 
 	/**
