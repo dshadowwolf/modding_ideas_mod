@@ -3,7 +3,6 @@ package com.mcmoddev.multiblocktest.util;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.Vector;
 import java.util.stream.Collectors;
 
