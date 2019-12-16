@@ -1,5 +1,10 @@
 package com.mcmoddev.multiblocktest.init;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Vector;
+import java.util.stream.Collectors;
+
 import com.mcmoddev.multiblocktest.blocks.*;
 
 import net.minecraft.block.Block;
@@ -35,4 +40,13 @@ public final class MyBlocks {
     		new ItemBlock(CAPACITOR_BANK_MASSIVE).setRegistryName(CAPACITOR_BANK_MASSIVE.getRegistryName()),
     		new ItemBlock(CAPACITOR_BANK_FINAL).setRegistryName(CAPACITOR_BANK_FINAL.getRegistryName()) };
     public static final Block[] capacitors = { CAPACITOR_BANK_BASE,  CAPACITOR_BANK_ADVANCED, CAPACITOR_BANK_MASSIVE, CAPACITOR_BANK_FINAL };
+    public static final Block[] allBlocks = { CAPACITOR_BANK_BASE,  CAPACITOR_BANK_ADVANCED, CAPACITOR_BANK_MASSIVE, CAPACITOR_BANK_FINAL, BLOCK_BANK_CONTROLLER, BLOCK_BANK_INPUT, BLOCK_BANK_OUTPUT};
+    private static List<Item> mbItems = Arrays.asList(BLOCK_BANK_CONTROLLER, BLOCK_BANK_INPUT, BLOCK_BANK_OUTPUT).stream()
+    		.map(b -> new ItemBlock(b).setRegistryName(b.getRegistryName())).collect(Collectors.toCollection(Vector::new));
+    public static final Item[] allItems;
+    
+    static {
+    	mbItems.addAll(Arrays.asList(cap_items));
+    	allItems = mbItems.toArray(new Item[mbItems.size()]);
+    }
 }

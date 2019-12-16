@@ -5,6 +5,9 @@ import com.mcmoddev.lib.events.MMDLibRegisterBlockTypes;
 import com.mcmoddev.lib.events.MMDLibRegisterBlocks;
 import com.mcmoddev.lib.events.MMDLibRegisterItemTypes;
 import com.mcmoddev.lib.events.MMDLibRegisterItems;
+
+import java.util.Arrays;
+
 import com.mcmoddev.lib.block.MMDBlockWithTile;
 
 import net.minecraft.item.Item;
@@ -28,15 +31,15 @@ public class EventHandler {
 	
     @SubscribeEvent
     public static void registerItems(final RegistryEvent.Register<Item> event) {
-    	event.getRegistry().registerAll(MyBlocks.cap_items);
+    	event.getRegistry().registerAll(MyBlocks.allItems);
     }
     
     @SubscribeEvent
     public static void registerBlocks(final RegistryEvent.Register<Block> event) {
-    	event.getRegistry().registerAll(MyBlocks.capacitors);
-    	for( Block cap: MyBlocks.capacitors) {
-    		((MMDBlockWithTile)cap).registerTile();
-    	}
+    	event.getRegistry().registerAll(MyBlocks.allBlocks);
+    	Arrays.asList(MyBlocks.allBlocks).stream()
+    	.filter(b -> b instanceof MMDBlockWithTile)
+    	.forEach(b -> ((MMDBlockWithTile)b).registerTile());
     }
 
     @SubscribeEvent
@@ -46,7 +49,7 @@ public class EventHandler {
     
     @SubscribeEvent
     public static void registerMMDLibBlocks(final MMDLibRegisterBlocks event) {
-    	for( Block cap: MyBlocks.capacitors) {
+    	for( Block cap: MyBlocks.allBlocks) {
         	com.mcmoddev.lib.init.Materials.DEFAULT.addNewBlock(cap.getRegistryName().getPath(), cap);
     	}
     }

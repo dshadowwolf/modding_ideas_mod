@@ -13,6 +13,7 @@ import java.util.stream.StreamSupport;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
+
 import org.apache.commons.lang3.tuple.MutableTriple;
 
 import net.minecraft.block.state.IBlockState;
@@ -40,7 +41,7 @@ public abstract class MultiBlockStructure implements IMultiBlockStructure {
 	private final int zWidth; // maximum z size of the structure
 	private final int height; // maximum height of the structure
 	
-	private final List<IBlockState> validBlocks = new LinkedList<>(); // list of blocks that make up a valid structure
+	private final Set<IBlockState> validBlocks = new HashSet<>(); // list of blocks that make up a valid structure
 	
 	// detected size of the structure
 	private final MutableTriple<Integer,Integer,Integer> detected = MutableTriple.of(0, 0, 0);
@@ -172,10 +173,12 @@ public abstract class MultiBlockStructure implements IMultiBlockStructure {
 	@Override
 	public boolean detectMultiblock() {
 		Pair<BlockPos, BlockPos> ext = findLimits();
-		List<IBlockState> blocks = new LinkedList<>();
+		List<IBlockState> blocks = StreamSupport.stream(BlockPos.getAllInBox(ext.getLeft(), ext.getRight()).spliterator(), false)
+				.map(bp -> Pair.of(bp, world.getBlockState(bp)))
+				.filter(data -> !data.getRight().getBlock().isAir(data.getRight(), world, data.getLeft()))
+				.map(data -> data.getRight())
+				.collect(Collectors.toList());
 		
-		BlockPos.getAllInBox(ext.getLeft(), ext.getRight()).forEach( pos -> blocks.add(world.getBlockState(pos)) );
-	
 		return validBlocks.containsAll(blocks);
 	}
 
@@ -192,8 +195,8 @@ public abstract class MultiBlockStructure implements IMultiBlockStructure {
 	public Pair<BlockPos, BlockPos> findLimits() {
         final Queue<BlockPos> remainingCandidates = new ArrayDeque<>();
         final Set<BlockPos> visited = new HashSet<>();
-        BlockPos.MutableBlockPos min = new BlockPos.MutableBlockPos();
-        BlockPos.MutableBlockPos max = new BlockPos.MutableBlockPos();
+        BlockPos.MutableBlockPos min = new BlockPos.MutableBlockPos(Integer.MAX_VALUE,Integer.MAX_VALUE,Integer.MAX_VALUE);
+        BlockPos.MutableBlockPos max = new BlockPos.MutableBlockPos(Integer.MIN_VALUE,Integer.MIN_VALUE,Integer.MIN_VALUE);
 
         remainingCandidates.add(origin);
         while(!remainingCandidates.isEmpty())
@@ -202,6 +205,7 @@ public abstract class MultiBlockStructure implements IMultiBlockStructure {
             visited.add(next);
             if (next == origin || validBlocks.contains(world.getBlockState(next)))
             {
+            	//com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.info("%s == %s == %s or validBlocks.contains(%s) == %s", next, origin, next == origin, world.getBlockState(next), validBlocks.contains(world.getBlockState(next)));
                 min.setPos(
                         Math.min(min.getX(),next.getX()),
                         Math.min(min.getY(),next.getY()),
