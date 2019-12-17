@@ -3,7 +3,6 @@ package com.mcmoddev.multiblocktest.util;
 import java.util.ArrayDeque;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -231,9 +230,11 @@ public abstract class MultiBlockStructure implements IMultiBlockStructure {
             }
         }
         
-        detected.left = Math.abs(max.getX() - min.getX());
-        detected.middle = Math.abs(max.getY() - min.getY());
-        detected.right = Math.abs(max.getZ() - min.getZ());
+        // the +1 is a correction factor that was spotted as required (and of a fixed value) during testing
+        // otherwise a 5x5x5 exterior size multiblock is only detected as being 4x4x4
+        detected.left = Math.abs(max.getX() - min.getX()) + 1;
+        detected.middle = Math.abs(max.getY() - min.getY()) + 1;
+        detected.right = Math.abs(max.getZ() - min.getZ()) + 1;
         
         minPos = min;
         maxPos = max;

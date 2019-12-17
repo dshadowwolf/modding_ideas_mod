@@ -3,8 +3,6 @@ package com.mcmoddev.multiblocktest.blocks;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nullable;
-
 import com.mcmoddev.lib.block.MMDBlockWithTile;
 import com.mcmoddev.multiblocktest.MultiBlockTest;
 import com.mcmoddev.multiblocktest.structures.MultiBlockCapacitorBank;
@@ -69,7 +67,6 @@ public class CapBankController extends MMDBlockWithTile<CapBankControllerTile> {
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase living, ItemStack stack) {
 		MULTIBLOCK_DETECTION = new MultiBlockCapacitorBank(pos, world);
-		MultiBlockTest.LOGGER.info("Multiblock Detected: %s --> isValid: %s", MULTIBLOCK_DETECTION.detectMultiblock()?"YES":"NO", MULTIBLOCK_DETECTION.isValidMultiblock()?"YES":"NO");
 		if(MULTIBLOCK_DETECTION.isValidMultiblock()) {
 			this.subsidiaries = MULTIBLOCK_DETECTION.getTiles().stream().filter(te -> (te instanceof ICapacitorComponent)).collect(Collectors.toList());
 			this.subsidiaries.forEach(sub -> ((ICapacitorComponent)sub).setMasterComponent(this));
