@@ -26,7 +26,6 @@ public final class MultiBlockTestConfig extends com.mcmoddev.lib.util.Config {
     
     
     private static void addConfigItem(String section, String key, int _default) {
-    	MultiBlockTest.LOGGER.info(String.format("Asked for %s of section %s with default value %d", key, section, _default));
     	Map<String, Integer> t = config_values.computeIfAbsent(section, m -> new HashMap<>());
     	t.put(key, configuration.getInt(key, section, _default, 0, Integer.MAX_VALUE, "There Is No Comment"));
     	config_values.put(section, t);

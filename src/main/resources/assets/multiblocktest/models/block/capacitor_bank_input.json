@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "multiblocktest:blocks/cap_bank_component_side",
+    "down": "multiblocktest:blocks/cap_bank_component_side",
+    "up": "multiblocktest:blocks/cap_bank_component_side",
+    "east": "multiblocktest:blocks/cap_bank_component_side",
+    "west": "multiblocktest:blocks/cap_bank_component_side",
+    "north": "multiblocktest:blocks/cap_bank_input_jack_face",
+    "south": "multiblocktest:blocks/cap_bank_component_side"
+  }
+}

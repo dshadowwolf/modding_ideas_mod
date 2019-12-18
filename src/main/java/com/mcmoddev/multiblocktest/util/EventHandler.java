@@ -31,7 +31,8 @@ public class EventHandler {
 	
     @SubscribeEvent
     public static void registerItems(final RegistryEvent.Register<Item> event) {
-    	event.getRegistry().registerAll(MyBlocks.allItems);
+    	event.getRegistry().registerAll(MyBlocks.mbItems);
+    	event.getRegistry().registerAll(MyBlocks.cap_items);
     }
     
     @SubscribeEvent
@@ -68,6 +69,10 @@ public class EventHandler {
 	public static void registerModels(final ModelRegistryEvent event) {
 		OBJLoader.INSTANCE.addDomain(MultiBlockTest.MODID);
 		for(Item item: MyBlocks.cap_items) {
+			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+		}
+		
+		for(Item item: MyBlocks.mbItems) {
 			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 		}
 	}    
