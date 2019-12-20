@@ -1,13 +1,9 @@
 package com.mcmoddev.multiblocktest.blocks;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.mcmoddev.lib.block.MMDBlockWithTile;
 import com.mcmoddev.multiblocktest.MultiBlockTest;
 import com.mcmoddev.multiblocktest.structures.MultiBlockCapacitorBank;
 import com.mcmoddev.multiblocktest.tileentity.CapBankControllerTile;
-import com.mcmoddev.multiblocktest.util.ICapacitorComponent;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -15,7 +11,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.Mirror;
@@ -26,7 +21,6 @@ import net.minecraft.world.World;
 
 public class CapBankController extends MMDBlockWithTile<CapBankControllerTile> {
 	private MultiBlockCapacitorBank MULTIBLOCK_DETECTION;
-	private List<TileEntity> subsidiaries;
 	public static final PropertyDirection FACING = PropertyDirection.create("facing");
 	
 	public CapBankController(Material material) {
@@ -68,8 +62,7 @@ public class CapBankController extends MMDBlockWithTile<CapBankControllerTile> {
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase living, ItemStack stack) {
 		MULTIBLOCK_DETECTION = new MultiBlockCapacitorBank(pos, world);
 		if(MULTIBLOCK_DETECTION.isValidMultiblock()) {
-			this.subsidiaries = MULTIBLOCK_DETECTION.getTiles().stream().filter(te -> (te instanceof ICapacitorComponent)).collect(Collectors.toList());
-			this.subsidiaries.forEach(sub -> ((ICapacitorComponent)sub).setMasterComponent(this));
+			MULTIBLOCK_DETECTION.form();
 		}
 		super.onBlockPlacedBy(world, pos, state, living, stack);
 	}

@@ -1,20 +1,14 @@
 package com.mcmoddev.multiblocktest.blocks;
 
-import java.util.stream.Collectors;
-
 import com.mcmoddev.lib.block.MMDBlockWithTile;
 import com.mcmoddev.multiblocktest.MultiBlockTest;
-import com.mcmoddev.multiblocktest.structures.MultiBlockCapacitorBank;
-import com.mcmoddev.multiblocktest.tileentity.CapBankControllerTile;
 import com.mcmoddev.multiblocktest.tileentity.CapBankInputJackTile;
-import com.mcmoddev.multiblocktest.util.ICapacitorComponent;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.Mirror;
@@ -23,8 +17,7 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class CapBankInputJack extends MMDBlockWithTile<CapBankInputJackTile> implements ICapacitorComponent {
-	private MMDBlockWithTile<CapBankControllerTile> masterComponent;
+public class CapBankInputJack extends MMDBlockWithTile<CapBankInputJackTile> {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing");
 	
 	public CapBankInputJack(Material material) {
@@ -32,16 +25,6 @@ public class CapBankInputJack extends MMDBlockWithTile<CapBankInputJackTile> imp
 		setTranslationKey(MultiBlockTest.MODID + "." + "capacitor_bank_input");
 		setRegistryName(new ResourceLocation(MultiBlockTest.MODID, "capacitor_bank_input"));
 		this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH);
-	}
-
-	@Override
-	public MMDBlockWithTile<CapBankControllerTile> getMasterComponent() {
-		return masterComponent;
-	}
-
-	@Override
-	public void setMasterComponent(MMDBlockWithTile<CapBankControllerTile> master) {
-		masterComponent = master;
 	}
 
 	@Override

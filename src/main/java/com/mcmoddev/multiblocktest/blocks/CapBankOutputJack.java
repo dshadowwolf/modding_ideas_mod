@@ -2,9 +2,7 @@ package com.mcmoddev.multiblocktest.blocks;
 
 import com.mcmoddev.lib.block.MMDBlockWithTile;
 import com.mcmoddev.multiblocktest.MultiBlockTest;
-import com.mcmoddev.multiblocktest.tileentity.CapBankControllerTile;
 import com.mcmoddev.multiblocktest.tileentity.CapBankOutputJackTile;
-import com.mcmoddev.multiblocktest.util.ICapacitorComponent;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -19,8 +17,7 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class CapBankOutputJack extends MMDBlockWithTile<CapBankOutputJackTile> implements ICapacitorComponent{
-	private MMDBlockWithTile<CapBankControllerTile> masterComponent;
+public class CapBankOutputJack extends MMDBlockWithTile<CapBankOutputJackTile> {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing");
 	
 	public CapBankOutputJack(Material material) {
@@ -28,16 +25,6 @@ public class CapBankOutputJack extends MMDBlockWithTile<CapBankOutputJackTile> i
 		setTranslationKey(MultiBlockTest.MODID + "." + "capacitor_bank_output");
 		setRegistryName(new ResourceLocation(MultiBlockTest.MODID, "capacitor_bank_output"));
 		this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH);
-	}
-
-	@Override
-	public MMDBlockWithTile<CapBankControllerTile> getMasterComponent() {
-		return masterComponent;
-	}
-
-	@Override
-	public void setMasterComponent(MMDBlockWithTile<CapBankControllerTile> master) {
-		masterComponent = master;
 	}
 
 	@Override

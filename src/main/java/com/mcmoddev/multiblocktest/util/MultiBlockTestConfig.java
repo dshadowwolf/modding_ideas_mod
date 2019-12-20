@@ -52,21 +52,30 @@ public final class MultiBlockTestConfig extends com.mcmoddev.lib.util.Config {
                     MinecraftForge.EVENT_BUS.register(new MultiBlockTestConfig());
             }
             
-            addConfigItem( SharedStrings.CAPACITY, SharedStrings.BASE,        50000 );
-            addConfigItem( SharedStrings.CAPACITY, SharedStrings.ADVANCED,   500000 );
-            addConfigItem( SharedStrings.CAPACITY, SharedStrings.MASSIVE,   5000000 );
-            addConfigItem( SharedStrings.CAPACITY, SharedStrings.FINAL,    10000000 );
+            addConfigItem( SharedStrings.CAPACITY,  SharedStrings.BASE,        50000 );
+            addConfigItem( SharedStrings.CAPACITY,  SharedStrings.ADVANCED,   500000 );
+            addConfigItem( SharedStrings.CAPACITY,  SharedStrings.MASSIVE,   5000000 );
+            addConfigItem( SharedStrings.CAPACITY,  SharedStrings.FINAL,    10000000 );
             
-            addConfigItem( SharedStrings.TRANSMIT, SharedStrings.BASE,         5000 );
-            addConfigItem( SharedStrings.TRANSMIT, SharedStrings.ADVANCED,    10000 );
-            addConfigItem( SharedStrings.TRANSMIT, SharedStrings.MASSIVE ,    50000 );
-            addConfigItem( SharedStrings.TRANSMIT, SharedStrings.FINAL,      100000 );
+            addConfigItem( SharedStrings.TRANSMIT,  SharedStrings.BASE,         5000 );
+            addConfigItem( SharedStrings.TRANSMIT,  SharedStrings.ADVANCED,    10000 );
+            addConfigItem( SharedStrings.TRANSMIT,  SharedStrings.MASSIVE ,    50000 );
+            addConfigItem( SharedStrings.TRANSMIT,  SharedStrings.FINAL,      100000 );
             
-            addConfigItem( SharedStrings.RECEIVE,  SharedStrings.BASE,         5000 );
-            addConfigItem( SharedStrings.RECEIVE,  SharedStrings.ADVANCED,    10000 );
-            addConfigItem( SharedStrings.RECEIVE,  SharedStrings.MASSIVE,     50000 );
-            addConfigItem( SharedStrings.RECEIVE,  SharedStrings.FINAL,      100000 );
+            addConfigItem( SharedStrings.RECEIVE,   SharedStrings.BASE,         5000 );
+            addConfigItem( SharedStrings.RECEIVE,   SharedStrings.ADVANCED,    10000 );
+            addConfigItem( SharedStrings.RECEIVE,   SharedStrings.MASSIVE,     50000 );
+            addConfigItem( SharedStrings.RECEIVE,   SharedStrings.FINAL,      100000 );
 
+            addConfigItem( SharedStrings.CAPACITY,  SharedStrings.BANK,       500000 );
+            addConfigItem( SharedStrings.TRANSMIT,  SharedStrings.BANK,        10000 );
+            addConfigItem( SharedStrings.RECEIVE,   SharedStrings.BANK,        10000 );
+            addConfigItem( SharedStrings.MODIFIERS, SharedStrings.BOOST_RS,    50000 );
+            addConfigItem( SharedStrings.MODIFIERS, SharedStrings.BOOST_C,    250000 );
+            addConfigItem( SharedStrings.MODIFIERS, SharedStrings.BOOST_D,         2 );
+            addConfigItem( SharedStrings.MODIFIERS, SharedStrings.BOOST_E,         5 );
+            addConfigItem( SharedStrings.MODIFIERS, SharedStrings.BOOST_N,        10 );
+            
             /*
              * Do shit Here
              */

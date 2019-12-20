@@ -9,16 +9,21 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
 import com.mcmoddev.multiblocktest.init.MyBlocks;
+import com.mcmoddev.multiblocktest.tileentity.CapBankControllerTile;
 import com.mcmoddev.multiblocktest.util.CuboidMultiblock;
+import com.mcmoddev.multiblocktest.util.ICapacitorComponent;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class MultiBlockCapacitorBank extends CuboidMultiblock {
 	private static final List<IBlockState> myBlocks;
+	private final World world;
+	private final BlockPos origin;
 	
 	static {
 		myBlocks = new Stack<>();
@@ -37,12 +42,16 @@ public class MultiBlockCapacitorBank extends CuboidMultiblock {
 	
 	public MultiBlockCapacitorBank(BlockPos origin, World worldIn) {
 		super(origin, worldIn, 128, 128, 128, myBlocks);
+		this.world = worldIn;
+		this.origin = origin;
 	}
 
 	@Override
 	public boolean form() {
-		// TODO Auto-generated method stub
-		return false;
+		List<TileEntity> t = getTiles();
+		TileEntity m = world.getTileEntity(this.origin);
+		t.forEach(te -> ((ICapacitorComponent)te).setMasterComponent((CapBankControllerTile)m));
+		return true;
 	}
 
 	@Override
