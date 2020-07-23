@@ -2,3 +2,7 @@ tile.multiblocktest.basic_capacitor_bank.name=Basic Capacitor Bank
 tile.multiblocktest.advanced_capacitor_bank.name=Advanced Capacitor Bank
 tile.multiblocktest.massive_capacitor_bank.name=Supercapacitor Bank
 tile.multiblocktest.final_capacitor_bank.name=Ultracapacitor Bank
+
+tile.multiblocktest.capacitor_bank_controller.name=Capacitor Bank Controller
+tile.multiblocktest.capacitor_bank_input.name=Capacitor Bank Input Bus
+tile.multiblocktest.capacitor_bank_output.name=Capacitor Bank Output Bus
