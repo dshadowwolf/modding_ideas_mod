@@ -62,9 +62,15 @@ public class CapBankController extends MMDBlockWithTile<CapBankControllerTile> {
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase living, ItemStack stack) {
 		MULTIBLOCK_DETECTION = new MultiBlockCapacitorBank(pos, world);
+		boolean formed = false;
 		if(MULTIBLOCK_DETECTION.isValidMultiblock()) {
+			formed = true;
 			MULTIBLOCK_DETECTION.form();
-		} else {
+		} 
+		
+		if(formed){
+			living.sendMessage(new TextComponentString("Multiblock capacitor formed"));
+		}else {
 			living.sendMessage(new TextComponentString("Invalid Multiblock"));
 		}
 		super.onBlockPlacedBy(world, pos, state, living, stack);
