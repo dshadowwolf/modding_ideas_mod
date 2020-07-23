@@ -17,6 +17,7 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
 public class CapBankController extends MMDBlockWithTile<CapBankControllerTile> {
@@ -63,6 +64,8 @@ public class CapBankController extends MMDBlockWithTile<CapBankControllerTile> {
 		MULTIBLOCK_DETECTION = new MultiBlockCapacitorBank(pos, world);
 		if(MULTIBLOCK_DETECTION.isValidMultiblock()) {
 			MULTIBLOCK_DETECTION.form();
+		} else {
+			living.sendMessage(new TextComponentString("Invalid Multiblock"));
 		}
 		super.onBlockPlacedBy(world, pos, state, living, stack);
 	}
