@@ -20,6 +20,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+@SuppressWarnings("deprecation")
 public class MultiBlockCapacitorBank extends CuboidMultiblock {
 	private static final List<IBlockState> myBlocks;
 	private final World world;
@@ -50,15 +51,17 @@ public class MultiBlockCapacitorBank extends CuboidMultiblock {
 	public boolean form() {
 		List<TileEntity> t = getTiles();
 		TileEntity m = world.getTileEntity(this.origin);
-		t.forEach(te -> ((ICapacitorComponent)te).setMasterComponent((CapBankControllerTile)m));
+		t.stream()
+		  .filter(tex -> tex instanceof ICapacitorComponent)
+		  .forEach(te -> ((ICapacitorComponent)te).setMasterComponent((CapBankControllerTile)m));
 		return true;
 	}
-
+	
 	@Override
 	public boolean isValidMultiblock() {
 		Pair<BlockPos, BlockPos> extents = findLimits();
 		List<Pair<BlockPos, IBlockState>> structure = getStructure();
-		List<IBlockState> blockStates = structure.stream().map(p -> p.getRight()).collect(Collectors.toList());
+		List<IBlockState> blockStates = structure.stream().map(p -> p.getRight().getBlock().getDefaultState()).collect(Collectors.toList());
 		Triple<Integer,Integer,Integer> sz = detectedSize();
 		
 		// for these first two the tests are also at Y-Min and Y-Max
@@ -88,38 +91,41 @@ public class MultiBlockCapacitorBank extends CuboidMultiblock {
 		boolean yFrameValid = frameY.size() == (sz.getRight()*4);
 		List<IBlockState> floor = structure.stream()
 				.filter(p -> p.getLeft().getY() == extents.getLeft().getY())
-				.filter(p -> myBlocks.contains(p.getRight()))
+				.filter(p -> myBlocks.contains(p.getRight()) || myBlocks.contains(p.getRight().getBlock().getDefaultState()))
 				.map(p -> p.getRight())
 				.collect(Collectors.toList());
 		List<IBlockState> ceiling = structure.stream()
 				.filter(p -> p.getLeft().getY() == extents.getRight().getY())
-				.filter(p -> myBlocks.contains(p.getRight()))
+				.filter(p -> myBlocks.contains(p.getRight()) || myBlocks.contains(p.getRight().getBlock().getDefaultState()))
 				.map(p -> p.getRight())
 				.collect(Collectors.toList());
 		List<IBlockState> zMin = structure.stream()
 				.filter(p -> p.getLeft().getZ() == extents.getLeft().getZ())
-				.filter(p -> myBlocks.contains(p.getRight()))
+				.filter(p -> myBlocks.contains(p.getRight()) || myBlocks.contains(p.getRight().getBlock().getDefaultState()))
 				.map(p -> p.getRight())
 				.collect(Collectors.toList());
 		List<IBlockState> zMax = structure.stream()
 				.filter(p -> p.getLeft().getZ() == extents.getRight().getZ())
-				.filter(p -> myBlocks.contains(p.getRight()))
+				.filter(p -> myBlocks.contains(p.getRight()) || myBlocks.contains(p.getRight().getBlock().getDefaultState()))
 				.map(p -> p.getRight())
 				.collect(Collectors.toList());
 		List<IBlockState> xMin = structure.stream()
 				.filter(p -> p.getLeft().getX() == extents.getLeft().getX())
-				.filter(p -> myBlocks.contains(p.getRight()))
+				.filter(p -> myBlocks.contains(p.getRight()) || myBlocks.contains(p.getRight().getBlock().getDefaultState()))
 				.map(p -> p.getRight())
 				.collect(Collectors.toList());
 		List<IBlockState> xMax = structure.stream()
 				.filter(p -> p.getLeft().getX() == extents.getRight().getX())
-				.filter(p -> myBlocks.contains(p.getRight()))
+				.filter(p -> myBlocks.contains(p.getRight()) || myBlocks.contains(p.getRight().getBlock().getDefaultState()))
 				.map(p -> p.getRight())
 				.collect(Collectors.toList());
 		boolean xWallsValid = (xMin.size() == xMax.size()) && (xMax.size() == (sz.getLeft()*sz.getRight()));
 		boolean zWallsValid = (zMin.size() == zMax.size()) && (zMax.size() == (sz.getMiddle()*sz.getRight()));
 		boolean floorAndCeilingValid = (floor.size() == ceiling.size()) && (ceiling.size() == (sz.getLeft()*sz.getMiddle()));
 		
+		com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("z Walls Valid: %s -- x Walls Valid: %s -- floorAndCeiling Valid: %s", zWallsValid, xWallsValid, floorAndCeilingValid);
+		com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("x Frame Valid: %s -- z Frame Valid: %s -- y Frame Valid: %s", xFrameValid, zFrameValid, yFrameValid);
+		com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("has right blocks? %s/%s", blockStates.contains(MyBlocks.BLOCK_BANK_OUTPUT.getDefaultState()), blockStates.contains(MyBlocks.BLOCK_BANK_INPUT.getDefaultState()));
 		return (xFrameValid && zFrameValid && yFrameValid)  && (xWallsValid && zWallsValid && floorAndCeilingValid) && (blockStates.contains(MyBlocks.BLOCK_BANK_INPUT.getDefaultState()) && blockStates.contains(MyBlocks.BLOCK_BANK_OUTPUT.getDefaultState()));
 	}
 
