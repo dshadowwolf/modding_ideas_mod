@@ -45,10 +45,12 @@ public class CapBankControllerTile extends MMDStandardTileEntity {
 	@Override
 	protected IWidgetGui getMainContentWidgetGui(GuiContext context) {
 		// TODO: flesh out properly - this is a placeholder
-        return new GridLayout(1, 3)
+        return new GridLayout(1, 5)
                 .addPiece(new LabelWidgetGui("This Is A Placeholder"), 0, 0, 1, 1)
-                .addPiece(new LabelWidgetGui(String.format("Input Rate: %d FE/t", battery.getInputRate())), 0, 1, 1, 1)
-                .addPiece(new LabelWidgetGui(String.format("Output Rate: %d FE/t", battery.getOutputRate())), 0, 2, 1, 1);
+                .addPiece(new LabelWidgetGui(String.format("Max Input Rate: %d FE/t", battery.getInputRate())), 0, 1, 1, 1)
+                .addPiece(new LabelWidgetGui(String.format("Max Output Rate: %d FE/t", battery.getOutputRate())), 0, 2, 1, 1)
+                .addPiece(new LabelWidgetGui(String.format("Max Storage: %d FE", battery.getCapacity())), 0, 3, 1, 1)
+                .addPiece(new LabelWidgetGui(String.format("Current Storage: %d FE", battery.getStored())), 0,  4, 1, 1);
 	}
 
 }
