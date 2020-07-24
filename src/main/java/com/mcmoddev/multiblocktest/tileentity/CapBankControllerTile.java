@@ -1,9 +1,11 @@
 package com.mcmoddev.multiblocktest.tileentity;
 
+import com.mcmoddev.lib.container.gui.FeatureWrapperGui;
 import com.mcmoddev.lib.container.gui.GuiContext;
 import com.mcmoddev.lib.container.gui.IWidgetGui;
 import com.mcmoddev.lib.container.gui.LabelWidgetGui;
 import com.mcmoddev.lib.container.gui.layout.GridLayout;
+import com.mcmoddev.lib.container.gui.layout.SinglePieceWrapper;
 import com.mcmoddev.lib.energy.ForgeEnergyStorage;
 import com.mcmoddev.lib.feature.ForgeEnergyBatteryFeature;
 import com.mcmoddev.lib.tile.MMDStandardTileEntity;
@@ -37,14 +39,22 @@ public class CapBankControllerTile extends MMDStandardTileEntity {
     protected CapBankControllerTile(final int capacity, final int receiveRate, final int sendRate) {
     	super();
     	
-        this.battery = this.addFeature(new ForgeEnergyBatteryFeature("battery",
-                0, capacity, receiveRate, sendRate))
-                .getEnergyStorage();
+        this.battery = this.addFeature(new ForgeEnergyBatteryFeature("battery", 0, DEFAULT_CAPACITY, DEFAULT_RECV_RATE, DEFAULT_TRANS_RATE)).getEnergyStorage();
+        this.battery.setInputRate(receiveRate);
+        this.battery.setoutputRate(sendRate);
     }
     
-	@Override
-	protected IWidgetGui getMainContentWidgetGui(GuiContext context) {
-		// TODO: flesh out properly - this is a placeholder
+    public final ForgeEnergyStorage getStorage() {
+    	return battery;
+    }
+
+    protected final IWidgetGui getMainContentWidgetGui(final GuiContext context) {
+        return new GridLayout(9, 1)
+            .addPiece(new FeatureWrapperGui(context, this, "battery"), 0, 0, 1, 1)
+            .addPiece(new SinglePieceWrapper(this.getContentWidgetGui(context)), 1, 0, 8, 1);
+    }
+
+	public IWidgetGui getContentWidgetGui(final GuiContext context) {
         return new GridLayout(1, 5)
                 .addPiece(new LabelWidgetGui("This Is A Placeholder"), 0, 0, 1, 1)
                 .addPiece(new LabelWidgetGui(String.format("Max Input Rate: %d FE/t", battery.getInputRate())), 0, 1, 1, 1)
@@ -52,5 +62,4 @@ public class CapBankControllerTile extends MMDStandardTileEntity {
                 .addPiece(new LabelWidgetGui(String.format("Max Storage: %d FE", battery.getCapacity())), 0, 3, 1, 1)
                 .addPiece(new LabelWidgetGui(String.format("Current Storage: %d FE", battery.getStored())), 0,  4, 1, 1);
 	}
-
 }
