@@ -16,6 +16,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 
 public class SimpleEnergyInputFeature extends ForgeEnergyBatteryFeature implements ITickable {
 	private ForgeEnergyStorage buffer;
@@ -81,12 +82,15 @@ public class SimpleEnergyInputFeature extends ForgeEnergyBatteryFeature implemen
 		
 		if (core != null) {
 			ForgeEnergyStorage controller = core.getStorage();
-			buffer.setoutputRate(controller.getInputRate());
+			int rate = controller.getInputRate();
+			buffer.setoutputRate(rate);
 			if (buffer.canTake() && controller.canStore()) {
-				int transferAmount = buffer.getStored() < controller.getInputRate() ? buffer.getStored() : controller.getInputRate();
-				com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("Tried to transfer %d to core storage", transferAmount);				
-				controller.store(transferAmount, true);
-				buffer.take(transferAmount, true);
+				int transferAmount = buffer.getStored() < rate ? buffer.getStored() : rate;
+				int toTransferBase = controller.store(transferAmount, false);
+				int toTransferFinal = buffer.take(toTransferBase, false);
+				com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("Tried to transfer %d to core storage (rate %d - avail %d - amount %d)", toTransferFinal, rate, buffer.getStored(), transferAmount);				
+				buffer.take(toTransferFinal, true);
+				controller.store(toTransferFinal, true);
 			}
 			buffer.setoutputRate(0);
 		}

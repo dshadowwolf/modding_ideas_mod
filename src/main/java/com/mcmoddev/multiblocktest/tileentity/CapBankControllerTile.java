@@ -22,7 +22,7 @@ public class CapBankControllerTile extends MMDStandardTileEntity {
 	public static final int DEFAULT_E_BOOST = MultiBlockTestConfig.config_values.get(SharedStrings.MODIFIERS).get(SharedStrings.BOOST_E);
 	public static final int DEFAULT_N_BOOST = MultiBlockTestConfig.config_values.get(SharedStrings.MODIFIERS).get(SharedStrings.BOOST_N);
 	
-    protected final ForgeEnergyStorage battery;
+    protected final ForgeEnergyStorage buffer;
 
     public CapBankControllerTile() {
     	this(DEFAULT_CAPACITY);
@@ -39,13 +39,11 @@ public class CapBankControllerTile extends MMDStandardTileEntity {
     protected CapBankControllerTile(final int capacity, final int receiveRate, final int sendRate) {
     	super();
     	
-        this.battery = this.addFeature(new ForgeEnergyBatteryFeature("battery", 0, DEFAULT_CAPACITY, DEFAULT_RECV_RATE, DEFAULT_TRANS_RATE)).getEnergyStorage();
-        this.battery.setInputRate(receiveRate);
-        this.battery.setoutputRate(sendRate);
+        this.buffer = this.addFeature(new ForgeEnergyBatteryFeature("battery", 0, capacity, receiveRate, sendRate)).getEnergyStorage();
     }
     
     public final ForgeEnergyStorage getStorage() {
-    	return battery;
+    	return buffer;
     }
 
     protected final IWidgetGui getMainContentWidgetGui(final GuiContext context) {
@@ -57,9 +55,9 @@ public class CapBankControllerTile extends MMDStandardTileEntity {
 	public IWidgetGui getContentWidgetGui(final GuiContext context) {
         return new GridLayout(1, 5)
                 .addPiece(new LabelWidgetGui("This Is A Placeholder"), 0, 0, 1, 1)
-                .addPiece(new LabelWidgetGui(String.format("Max Input Rate: %d FE/t", battery.getInputRate())), 0, 1, 1, 1)
-                .addPiece(new LabelWidgetGui(String.format("Max Output Rate: %d FE/t", battery.getOutputRate())), 0, 2, 1, 1)
-                .addPiece(new LabelWidgetGui(String.format("Max Storage: %d FE", battery.getCapacity())), 0, 3, 1, 1)
-                .addPiece(new LabelWidgetGui(String.format("Current Storage: %d FE", battery.getStored())), 0,  4, 1, 1);
+                .addPiece(new LabelWidgetGui(String.format("Max Input Rate: %d FE/t", buffer.getInputRate())), 0, 1, 1, 1)
+                .addPiece(new LabelWidgetGui(String.format("Max Output Rate: %d FE/t", buffer.getOutputRate())), 0, 2, 1, 1)
+                .addPiece(new LabelWidgetGui(String.format("Max Storage: %d FE", buffer.getCapacity())), 0, 3, 1, 1)
+                .addPiece(new LabelWidgetGui(String.format("Current Storage: %d FE", buffer.getStored())), 0,  4, 1, 1);
 	}
 }
