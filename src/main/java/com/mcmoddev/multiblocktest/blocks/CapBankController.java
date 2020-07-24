@@ -1,5 +1,7 @@
 package com.mcmoddev.multiblocktest.blocks;
 
+import javax.annotation.Nullable;
+
 import com.mcmoddev.lib.block.MMDBlockWithTile;
 import com.mcmoddev.multiblocktest.MultiBlockTest;
 import com.mcmoddev.multiblocktest.structures.MultiBlockCapacitorBank;
@@ -59,8 +61,7 @@ public class CapBankController extends MMDBlockWithTile<CapBankControllerTile> {
         return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
     }
 
-	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase living, ItemStack stack) {
+    private void tryForm(World world, BlockPos pos, @Nullable EntityLivingBase living) {
 		MULTIBLOCK_DETECTION = new MultiBlockCapacitorBank(pos, world);
 		boolean formed = false;
 		if(MULTIBLOCK_DETECTION.isValidMultiblock()) {
@@ -68,11 +69,18 @@ public class CapBankController extends MMDBlockWithTile<CapBankControllerTile> {
 			MULTIBLOCK_DETECTION.form();
 		} 
 		
-		if(formed){
-			living.sendMessage(new TextComponentString("Valid Multiblock"));
-		} else {
-			living.sendMessage(new TextComponentString("Invalid Multiblock"));
+		if (living != null) {
+			if(formed){
+				living.sendMessage(new TextComponentString("Valid Multiblock"));
+			} else {
+				living.sendMessage(new TextComponentString("Invalid Multiblock"));
+			}    	
 		}
+    }
+    
+	@Override
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase living, ItemStack stack) {
+		tryForm(world, pos, living);
 		super.onBlockPlacedBy(world, pos, state, living, stack);
 	}
 
@@ -84,6 +92,7 @@ public class CapBankController extends MMDBlockWithTile<CapBankControllerTile> {
 			enumfacing = placer.getHorizontalFacing().getOpposite();
 		}
 
+		tryForm(world, pos, placer);
 		return this.getDefaultState().withProperty(FACING, enumfacing);
 	}
 }

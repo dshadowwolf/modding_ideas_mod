@@ -1,9 +1,11 @@
 package com.mcmoddev.multiblocktest.tileentity;
 
+import com.mcmoddev.lib.container.gui.FeatureWrapperGui;
 import com.mcmoddev.lib.container.gui.GuiContext;
 import com.mcmoddev.lib.container.gui.IWidgetGui;
 import com.mcmoddev.lib.container.gui.LabelWidgetGui;
 import com.mcmoddev.lib.container.gui.layout.GridLayout;
+import com.mcmoddev.lib.container.gui.layout.SinglePieceWrapper;
 import com.mcmoddev.lib.energy.ForgeEnergyStorage;
 import com.mcmoddev.lib.feature.ForgeEnergyBatteryFeature;
 import com.mcmoddev.lib.tile.MMDStandardTileEntity;
@@ -20,7 +22,7 @@ public class CapBankControllerTile extends MMDStandardTileEntity {
 	public static final int DEFAULT_E_BOOST = MultiBlockTestConfig.config_values.get(SharedStrings.MODIFIERS).get(SharedStrings.BOOST_E);
 	public static final int DEFAULT_N_BOOST = MultiBlockTestConfig.config_values.get(SharedStrings.MODIFIERS).get(SharedStrings.BOOST_N);
 	
-    protected final ForgeEnergyStorage battery;
+    protected final ForgeEnergyStorage buffer;
 
     public CapBankControllerTile() {
     	this(DEFAULT_CAPACITY);
@@ -37,20 +39,25 @@ public class CapBankControllerTile extends MMDStandardTileEntity {
     protected CapBankControllerTile(final int capacity, final int receiveRate, final int sendRate) {
     	super();
     	
-        this.battery = this.addFeature(new ForgeEnergyBatteryFeature("battery",
-                0, capacity, receiveRate, sendRate))
-                .getEnergyStorage();
+        this.buffer = this.addFeature(new ForgeEnergyBatteryFeature("battery", 0, capacity, receiveRate, sendRate)).getEnergyStorage();
     }
     
-	@Override
-	protected IWidgetGui getMainContentWidgetGui(GuiContext context) {
-		// TODO: flesh out properly - this is a placeholder
+    public final ForgeEnergyStorage getStorage() {
+    	return buffer;
+    }
+
+    protected final IWidgetGui getMainContentWidgetGui(final GuiContext context) {
+        return new GridLayout(9, 1)
+            .addPiece(new FeatureWrapperGui(context, this, "battery"), 0, 0, 1, 1)
+            .addPiece(new SinglePieceWrapper(this.getContentWidgetGui(context)), 1, 0, 8, 1);
+    }
+
+	public IWidgetGui getContentWidgetGui(final GuiContext context) {
         return new GridLayout(1, 5)
                 .addPiece(new LabelWidgetGui("This Is A Placeholder"), 0, 0, 1, 1)
-                .addPiece(new LabelWidgetGui(String.format("Max Input Rate: %d FE/t", battery.getInputRate())), 0, 1, 1, 1)
-                .addPiece(new LabelWidgetGui(String.format("Max Output Rate: %d FE/t", battery.getOutputRate())), 0, 2, 1, 1)
-                .addPiece(new LabelWidgetGui(String.format("Max Storage: %d FE", battery.getCapacity())), 0, 3, 1, 1)
-                .addPiece(new LabelWidgetGui(String.format("Current Storage: %d FE", battery.getStored())), 0,  4, 1, 1);
+                .addPiece(new LabelWidgetGui(String.format("Max Input Rate: %d FE/t", buffer.getInputRate())), 0, 1, 1, 1)
+                .addPiece(new LabelWidgetGui(String.format("Max Output Rate: %d FE/t", buffer.getOutputRate())), 0, 2, 1, 1)
+                .addPiece(new LabelWidgetGui(String.format("Max Storage: %d FE", buffer.getCapacity())), 0, 3, 1, 1)
+                .addPiece(new LabelWidgetGui(String.format("Current Storage: %d FE", buffer.getStored())), 0,  4, 1, 1);
 	}
-
 }
