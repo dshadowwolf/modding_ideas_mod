@@ -69,8 +69,8 @@ public class CapBankController extends MMDBlockWithTile<CapBankControllerTile> {
 		} 
 		
 		if(formed){
-			living.sendMessage(new TextComponentString("Multiblock capacitor formed"));
-		}else {
+			living.sendMessage(new TextComponentString("Valid Multiblock"));
+		} else {
 			living.sendMessage(new TextComponentString("Invalid Multiblock"));
 		}
 		super.onBlockPlacedBy(world, pos, state, living, stack);

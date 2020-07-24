@@ -33,3 +33,6 @@ libs/*
 
 .DS_Store
 .okhttpcache/*.gradle
+
+bin
+bin/*
