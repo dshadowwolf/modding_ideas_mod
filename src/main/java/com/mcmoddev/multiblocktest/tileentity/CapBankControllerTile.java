@@ -46,6 +46,26 @@ public class CapBankControllerTile extends MMDStandardTileEntity {
     	return buffer;
     }
 
+    public final boolean canStore() {
+    	return buffer.canStore();
+    }
+    
+    public final boolean canTake() {
+    	return buffer.canTake();
+    }
+    
+    public final int store(final int amount, boolean simulate) {
+    	com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("CapBankControllerTile (%s) -> store(%d, %s)", this, amount, simulate);
+    	com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("CapBankControllerTile (%s) buffer (level %d, capacity %d, input %d, output %d)", this, buffer.getStored(), buffer.getCapacity(), buffer.getInputRate(), buffer.getOutputRate());
+    	return buffer.store(amount, simulate);
+    }
+    
+    public final int take(final int amount, boolean simulate) {
+    	com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("CapBankControllerTile (%s) -> take(%d, %s)", this, amount, simulate);
+    	com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("CapBankControllerTile (%s) buffer (level %d, capacity %d, input %d, output %d)", this, buffer.getStored(), buffer.getCapacity(), buffer.getInputRate(), buffer.getOutputRate());
+    	return buffer.take(amount, simulate);
+    }
+    
     protected final IWidgetGui getMainContentWidgetGui(final GuiContext context) {
         return new GridLayout(9, 1)
             .addPiece(new FeatureWrapperGui(context, this, "battery"), 0, 0, 1, 1)

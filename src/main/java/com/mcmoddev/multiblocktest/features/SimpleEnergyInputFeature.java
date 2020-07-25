@@ -84,13 +84,13 @@ public class SimpleEnergyInputFeature extends ForgeEnergyBatteryFeature implemen
 			ForgeEnergyStorage controller = core.getStorage();
 			int rate = controller.getInputRate();
 			buffer.setoutputRate(rate);
-			if (buffer.canTake() && controller.canStore()) {
+			if (buffer.canTake() && core.canStore()) {
 				int transferAmount = buffer.getStored() < rate ? buffer.getStored() : rate;
-				int toTransferBase = controller.store(transferAmount, false);
+				int toTransferBase = core.store(transferAmount, false);
 				int toTransferFinal = buffer.take(toTransferBase, false);
 				com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("Tried to transfer %d to core storage (rate %d - avail %d - amount %d)", toTransferFinal, rate, buffer.getStored(), transferAmount);				
 				buffer.take(toTransferFinal, true);
-				controller.store(toTransferFinal, true);
+				core.store(toTransferFinal, true);
 			}
 			buffer.setoutputRate(0);
 		}
