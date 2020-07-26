@@ -11,7 +11,9 @@ import com.mcmoddev.lib.tile.MMDStandardTileEntity;
 import com.mcmoddev.multiblocktest.features.SimpleEnergyStorageFeature;
 import com.mcmoddev.multiblocktest.util.MultiBlockTestConfig;
 import com.mcmoddev.multiblocktest.util.SharedStrings;
+import com.mcmoddev.multiblocktest.structures.MultiBlockCapacitorBank;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
 public class CapBankControllerTile extends MMDStandardTileEntity {
@@ -73,5 +75,21 @@ public class CapBankControllerTile extends MMDStandardTileEntity {
                 .addPiece(new LabelWidgetGui(String.format("Max Output Rate: %d FE/t", buffer.getOutputRate())), 0, 2, 1, 1)
                 .addPiece(new LabelWidgetGui(String.format("Max Storage: %d FE", buffer.getCapacity())), 0, 3, 1, 1)
                 .addPiece(new LabelWidgetGui(String.format("Current Storage: %d FE", buffer.getStored())), 0,  4, 1, 1);
+	}
+	
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		NBTTagCompound temp = super.writeToNBT(nbt);
+		temp.setTag("capacitor", buffer.serializeNBT());
+		return temp;
+	}
+	
+	@Override
+    public void readFromNBT(NBTTagCompound compound) {
+		super.readFromNBT(compound);
+		if (compound.hasKey("capacitor"))
+			buffer.deserializeNBT(compound.getCompoundTag("capacitor"));
+		MultiBlockCapacitorBank tempMB = new MultiBlockCapacitorBank(this.getPos(), this.getWorld());
+		if (tempMB.isValidMultiblock()) tempMB.form();
 	}
 }
