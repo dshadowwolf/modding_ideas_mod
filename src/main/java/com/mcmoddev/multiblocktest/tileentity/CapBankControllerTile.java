@@ -7,10 +7,12 @@ import com.mcmoddev.lib.container.gui.LabelWidgetGui;
 import com.mcmoddev.lib.container.gui.layout.GridLayout;
 import com.mcmoddev.lib.container.gui.layout.SinglePieceWrapper;
 import com.mcmoddev.lib.energy.ForgeEnergyStorage;
-import com.mcmoddev.lib.feature.ForgeEnergyBatteryFeature;
 import com.mcmoddev.lib.tile.MMDStandardTileEntity;
+import com.mcmoddev.multiblocktest.features.SimpleEnergyStorageFeature;
 import com.mcmoddev.multiblocktest.util.MultiBlockTestConfig;
 import com.mcmoddev.multiblocktest.util.SharedStrings;
+
+import net.minecraft.util.EnumFacing;
 
 public class CapBankControllerTile extends MMDStandardTileEntity {
 	public static final int DEFAULT_CAPACITY = MultiBlockTestConfig.config_values.get(SharedStrings.CAPACITY).get(SharedStrings.BANK);
@@ -38,31 +40,23 @@ public class CapBankControllerTile extends MMDStandardTileEntity {
     
     protected CapBankControllerTile(final int capacity, final int receiveRate, final int sendRate) {
     	super();
-    	
-        this.buffer = this.addFeature(new ForgeEnergyBatteryFeature("battery", 0, capacity, receiveRate, sendRate)).getEnergyStorage();
+    	SimpleEnergyStorageFeature k = new SimpleEnergyStorageFeature("battery", 0, capacity, receiveRate, sendRate);
+    	k.addActiveFacings(EnumFacing.UP);
+        this.buffer = this.addFeature(k).getEnergyStorage();
     }
     
     public final ForgeEnergyStorage getStorage() {
     	return buffer;
     }
-
-    public final boolean canStore() {
-    	return buffer.canStore();
-    }
-    
-    public final boolean canTake() {
-    	return buffer.canTake();
-    }
     
     public final int store(final int amount, boolean simulate) {
-    	com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("CapBankControllerTile (%s) -> store(%d, %s)", this, amount, simulate);
-    	com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("CapBankControllerTile (%s) buffer (level %d, capacity %d, input %d, output %d)", this, buffer.getStored(), buffer.getCapacity(), buffer.getInputRate(), buffer.getOutputRate());
+    	this.markDirty();
     	return buffer.store(amount, simulate);
     }
     
     public final int take(final int amount, boolean simulate) {
-    	com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("CapBankControllerTile (%s) -> take(%d, %s)", this, amount, simulate);
-    	com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("CapBankControllerTile (%s) buffer (level %d, capacity %d, input %d, output %d)", this, buffer.getStored(), buffer.getCapacity(), buffer.getInputRate(), buffer.getOutputRate());
+    	this.markDirty();
+    	((SimpleEnergyStorageFeature)(this.getTypedFeature(SimpleEnergyStorageFeature.class, "battery"))).dirty();
     	return buffer.take(amount, simulate);
     }
     

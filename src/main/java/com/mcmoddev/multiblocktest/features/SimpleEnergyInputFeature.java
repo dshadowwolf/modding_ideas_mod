@@ -3,6 +3,7 @@ package com.mcmoddev.multiblocktest.features;
 import javax.annotation.Nullable;
 
 import com.mcmoddev.lib.energy.ForgeEnergyStorage;
+import com.mcmoddev.lib.feature.FeatureDirtyLevel;
 import com.mcmoddev.lib.feature.ForgeEnergyBatteryFeature;
 import com.mcmoddev.multiblocktest.tileentity.CapBankControllerTile;
 import com.mcmoddev.multiblocktest.tileentity.CapBankInputJackTile;
@@ -35,12 +36,6 @@ public class SimpleEnergyInputFeature extends ForgeEnergyBatteryFeature implemen
 	public void setCoreComponent(CapBankControllerTile central) {
 		core = central;
 	}
-	
-	@Override
-	public void deserializeNBT(NBTTagCompound nbt) {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Nullable
 	private TileEntity getAdjacentTE(EnumFacing facing) {
@@ -58,48 +53,47 @@ public class SimpleEnergyInputFeature extends ForgeEnergyBatteryFeature implemen
 				CapBankControllerTile zz = ((CapBankInputJackTile)sourceT).getMasterComponent(); 
 				if (zz == null) return;
 				else setCoreComponent(zz);
+				setDirty(FeatureDirtyLevel.LOAD);
 			}
 		}
 		
 		for( EnumFacing facing : EnumFacing.values() ) {
 			TileEntity target = getAdjacentTE(facing);
 			if(target != null && target.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
-				if (buffer.canStore()) {
-					com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("Sanity Check: capacity %dFE :: Input Rate %d FE/t :: Output Rate: %d FE/t", buffer.getCapacity(), buffer.getInputRate(), buffer.getOutputRate());
+				IEnergyStorage es = target.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite());
+				if (buffer.canStore() && es != null) {
+					ccc = buffer.getStored();
 					int maxValue = buffer.getInputRate();
 					int canStore = buffer.store(maxValue, false);
 					int storeThis = canStore > maxValue?maxValue:canStore;
-					int canExtract = target.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite()).extractEnergy(storeThis, true);
+					int canExtract = es.extractEnergy(storeThis, true);
 					int ready = canExtract < storeThis ? canExtract : storeThis;
-					buffer.store(target.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite()).extractEnergy(ready, false), true);
-					com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("Tried to input %d (of possible %d) from TE at %s", ready, canExtract, target.getPos());
-					com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("storeThis: %d -- canStore: %d -- canExtract: %d", storeThis, canStore, canExtract);
-					com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("maxValue: %d -- canStore: %d -- storeThis: %d -- canExtract: %d -- ready: %d", maxValue, canStore, storeThis, canExtract, ready);
+					int zaa = target.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite()).extractEnergy(ready, false);
+					buffer.store(zaa, true);
+					setDirty(FeatureDirtyLevel.TICK);
 				}
 			}
 		}
 
-		
 		if (core != null) {
 			ForgeEnergyStorage controller = core.getStorage();
-			int rate = controller.getInputRate();
+			int rate = core.getCapability(CapabilityEnergy.ENERGY, EnumFacing.UP).receiveEnergy(100000000, true);
 			buffer.setoutputRate(rate);
-			if (buffer.canTake() && core.canStore()) {
+			if (buffer.canTake() && controller.canStore() && buffer.getStored() > 0) {
+				IEnergyStorage e = core.getCapability(CapabilityEnergy.ENERGY, EnumFacing.UP);
+				if(e == null) {
+					buffer.setoutputRate(0);
+					return;
+				}
 				int transferAmount = buffer.getStored() < rate ? buffer.getStored() : rate;
-				int toTransferBase = core.store(transferAmount, false);
+				int toTransferBase = e.receiveEnergy(transferAmount, true);
 				int toTransferFinal = buffer.take(toTransferBase, false);
-				com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("Tried to transfer %d to core storage (rate %d - avail %d - amount %d)", toTransferFinal, rate, buffer.getStored(), transferAmount);				
 				buffer.take(toTransferFinal, true);
-				core.store(toTransferFinal, true);
+				e.receiveEnergy(toTransferFinal, false);
 			}
+			setDirty(FeatureDirtyLevel.TICK);
 			buffer.setoutputRate(0);
 		}
-	}
-
-	@Override
-	protected void writeToNBT(NBTTagCompound tag) {
-		// TODO Auto-generated method stub
-
 	}
 
 }
