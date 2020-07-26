@@ -16,6 +16,9 @@ import com.mcmoddev.multiblocktest.structures.MultiBlockCapacitorBank;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
+/*
+ * Something is borked somewhere in here, but damned if I know what - perhaps its actually over in the features logic ?
+ */
 public class CapBankControllerTile extends MMDStandardTileEntity {
 	public static final int DEFAULT_CAPACITY = MultiBlockTestConfig.config_values.get(SharedStrings.CAPACITY).get(SharedStrings.BANK);
 	public static final int DEFAULT_RECV_RATE = MultiBlockTestConfig.config_values.get(SharedStrings.RECEIVE).get(SharedStrings.BANK);
