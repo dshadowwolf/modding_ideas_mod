@@ -7,10 +7,7 @@ import com.mcmoddev.lib.feature.FeatureDirtyLevel;
 import com.mcmoddev.lib.feature.ForgeEnergyBatteryFeature;
 import com.mcmoddev.multiblocktest.tileentity.CapBankControllerTile;
 import com.mcmoddev.multiblocktest.tileentity.CapBankInputJackTile;
-import com.mcmoddev.multiblocktest.util.MultiBlockTestConfig;
-import com.mcmoddev.multiblocktest.util.SharedStrings;
 
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -23,11 +20,9 @@ public class SimpleEnergyInputFeature extends ForgeEnergyBatteryFeature implemen
 	private ForgeEnergyStorage buffer;
 	private CapBankControllerTile core;
 	private TileEntity sourceT;
-	public static final int DEFAULT_CAPACITY = MultiBlockTestConfig.config_values.get(SharedStrings.CAPACITY).get(SharedStrings.BANK);
-	public static final int DEFAULT_RECV_RATE = MultiBlockTestConfig.config_values.get(SharedStrings.RECEIVE).get(SharedStrings.BANK);
 
 	public SimpleEnergyInputFeature(String key, CapBankControllerTile central, TileEntity source) {
-		super(key, 0, DEFAULT_CAPACITY, DEFAULT_RECV_RATE, 0);
+		super(key, 0, CapBankControllerTile.DEFAULT_CAPACITY, CapBankControllerTile.DEFAULT_RECV_RATE, 0);
 		buffer = getEnergyStorage();
 		core = central;
 		sourceT = source;

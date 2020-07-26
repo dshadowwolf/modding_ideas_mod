@@ -5,25 +5,20 @@ import com.mcmoddev.lib.container.gui.IWidgetGui;
 import com.mcmoddev.lib.container.gui.LabelWidgetGui;
 import com.mcmoddev.lib.container.gui.layout.GridLayout;
 import com.mcmoddev.lib.energy.ForgeEnergyStorage;
-import com.mcmoddev.lib.feature.ForgeEnergyBatteryFeature;
 import com.mcmoddev.lib.tile.MMDStandardTileEntity;
+import com.mcmoddev.multiblocktest.features.SimpleEnergyOutputFeature;
 import com.mcmoddev.multiblocktest.util.ICapacitorComponent;
-import com.mcmoddev.multiblocktest.util.MultiBlockTestConfig;
-import com.mcmoddev.multiblocktest.util.SharedStrings;
 
 public class CapBankOutputJackTile extends MMDStandardTileEntity implements ICapacitorComponent {
 	private CapBankControllerTile mainComponent;
-	public static final int DEFAULT_CAPACITY = MultiBlockTestConfig.config_values.get(SharedStrings.CAPACITY).get(SharedStrings.BANK);
-	public static final int DEFAULT_TRANS_RATE = MultiBlockTestConfig.config_values.get(SharedStrings.TRANSMIT).get(SharedStrings.BANK);
 	private final ForgeEnergyStorage buffer;
 	
 	public CapBankOutputJackTile() {
-		this(DEFAULT_TRANS_RATE);
+		this(CapBankControllerTile.DEFAULT_TRANS_RATE);
 	}
 	
 	protected CapBankOutputJackTile(final int rate) {
-		buffer = this.addFeature(new ForgeEnergyBatteryFeature("battery", 0, DEFAULT_CAPACITY, 0, rate))
-				.getEnergyStorage();
+		buffer = this.addFeature(new SimpleEnergyOutputFeature("battery", mainComponent, this)).getEnergyStorage();
 	}
 	
 	public final ForgeEnergyStorage getStorage() {

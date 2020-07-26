@@ -3,15 +3,11 @@ package com.mcmoddev.multiblocktest.features;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import com.mcmoddev.lib.feature.FeatureDirtyLevel;
 import com.mcmoddev.lib.feature.ForgeEnergyBatteryFeature;
-import com.mcmoddev.multiblocktest.util.MultiBlockTestConfig;
-import com.mcmoddev.multiblocktest.util.SharedStrings;
+import com.mcmoddev.multiblocktest.tileentity.CapBankControllerTile;
 
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.capabilities.Capability;
 
 public class SimpleEnergyStorageFeature extends ForgeEnergyBatteryFeature {
 	private List<EnumFacing> activeFacings = new LinkedList<>();
@@ -21,7 +17,7 @@ public class SimpleEnergyStorageFeature extends ForgeEnergyBatteryFeature {
 	}
 	
 	public SimpleEnergyStorageFeature(String key) {
-		this(key, MultiBlockTestConfig.config_values.get(SharedStrings.CAPACITY).get(SharedStrings.BANK));
+		this(key, CapBankControllerTile.DEFAULT_CAPACITY);
 	}
 	
 	public SimpleEnergyStorageFeature(String key, int capacity) {
@@ -29,11 +25,11 @@ public class SimpleEnergyStorageFeature extends ForgeEnergyBatteryFeature {
 	}
 	
 	public SimpleEnergyStorageFeature(String key, int initial, int capacity) {
-		this(key, initial, capacity, MultiBlockTestConfig.config_values.get(SharedStrings.RECEIVE).get(SharedStrings.BANK));
+		this(key, initial, capacity, CapBankControllerTile.DEFAULT_RECV_RATE);
 	}
 	
 	public SimpleEnergyStorageFeature(String key, int initial, int capacity, int rate) {
-		this( key, initial, capacity, rate, MultiBlockTestConfig.config_values.get(SharedStrings.TRANSMIT).get(SharedStrings.BANK));
+		this( key, initial, capacity, rate, CapBankControllerTile.DEFAULT_TRANS_RATE);
 	}
 	
 	public SimpleEnergyStorageFeature(String key, int initial, int capacity, int inputRate, int outputRate) {
@@ -48,11 +44,11 @@ public class SimpleEnergyStorageFeature extends ForgeEnergyBatteryFeature {
 		super.setDirty(FeatureDirtyLevel.TICK);
 	}
 	
+	/*
     @Override
     public boolean hasCapability(final Capability<?> capability, @Nullable final EnumFacing facing) {
     	boolean rv = false;
     	if (activeFacings.contains(facing)) rv = super.hasCapability(capability, facing);
-    	com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("%s.hasCapability(%s, %s) -> %s", this.getClass().getCanonicalName(), capability, facing, rv);    	
     	return rv;
     }
 
@@ -61,7 +57,6 @@ public class SimpleEnergyStorageFeature extends ForgeEnergyBatteryFeature {
     public <T> T getCapability(final Capability<T> capability, @Nullable final EnumFacing facing) {
     	T rv = null;
     	if (hasCapability(capability, facing)) rv = super.getCapability(capability, facing);
-    	com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("%s.getCapability(%s, %s) -> %s", this.getClass().getCanonicalName(), capability, facing, rv);    	
     	return rv;
-    }
+    }*/
 }
