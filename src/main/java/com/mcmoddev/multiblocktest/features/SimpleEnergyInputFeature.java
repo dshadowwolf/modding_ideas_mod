@@ -62,7 +62,6 @@ public class SimpleEnergyInputFeature extends ForgeEnergyBatteryFeature implemen
 			if(target != null && target.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
 				IEnergyStorage es = target.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite());
 				if (buffer.canStore() && es != null) {
-					ccc = buffer.getStored();
 					int maxValue = buffer.getInputRate();
 					int canStore = buffer.store(maxValue, false);
 					int storeThis = canStore > maxValue?maxValue:canStore;
