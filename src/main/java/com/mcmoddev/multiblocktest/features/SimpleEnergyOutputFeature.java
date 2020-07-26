@@ -72,9 +72,9 @@ public class SimpleEnergyOutputFeature extends ForgeEnergyBatteryFeature impleme
 			IEnergyStorage coreES = core.getCapability(CapabilityEnergy.ENERGY, EnumFacing.UP);
 			if (coreES == null) return;
 			int willTake = coreES.extractEnergy(canTakeActual, true);
-			buffer.take(coreES.extractEnergy(willTake, false), true);
+			buffer.store(coreES.extractEnergy(willTake, false), true);
 		}
-
+		setDirty(FeatureDirtyLevel.TICK);
 		buffer.setInputRate(0);
 	}
 

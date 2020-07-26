@@ -83,15 +83,15 @@ public class CapBankControllerTile extends MMDStandardTileEntity {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		NBTTagCompound temp = super.writeToNBT(nbt);
-		temp.setTag("capacitor", buffer.serializeNBT());
+//		temp.setTag("capacitor", buffer.serializeNBT());
 		return temp;
 	}
 	
 	@Override
     public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		if (compound.hasKey("capacitor"))
-			buffer.deserializeNBT(compound.getCompoundTag("capacitor"));
+//		if (compound.hasKey("capacitor"))
+//			buffer.deserializeNBT(compound.getCompoundTag("capacitor"));
 		MultiBlockCapacitorBank tempMB = new MultiBlockCapacitorBank(this.getPos(), this.getWorld());
 		if (tempMB.isValidMultiblock()) tempMB.form();
 	}

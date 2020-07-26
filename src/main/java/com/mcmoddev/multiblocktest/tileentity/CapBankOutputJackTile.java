@@ -1,9 +1,11 @@
 package com.mcmoddev.multiblocktest.tileentity;
 
+import com.mcmoddev.lib.container.gui.FeatureWrapperGui;
 import com.mcmoddev.lib.container.gui.GuiContext;
 import com.mcmoddev.lib.container.gui.IWidgetGui;
 import com.mcmoddev.lib.container.gui.LabelWidgetGui;
 import com.mcmoddev.lib.container.gui.layout.GridLayout;
+import com.mcmoddev.lib.container.gui.layout.SinglePieceWrapper;
 import com.mcmoddev.lib.energy.ForgeEnergyStorage;
 import com.mcmoddev.lib.tile.MMDStandardTileEntity;
 import com.mcmoddev.multiblocktest.features.SimpleEnergyOutputFeature;
@@ -31,9 +33,11 @@ public class CapBankOutputJackTile extends MMDStandardTileEntity implements ICap
 		
 	@Override
 	protected IWidgetGui getMainContentWidgetGui(GuiContext context) {
-		if (mainComponent != null)
-			return mainComponent.getMainContentWidgetGui(context);
-		else
+		if (mainComponent != null) {
+			return new GridLayout(9, 1)
+            .addPiece(new FeatureWrapperGui(context, this, "battery"), 0, 0, 1, 1)
+            .addPiece(new SinglePieceWrapper(mainComponent.getMainContentWidgetGui(context)), 1, 0, 8, 1);
+		} else
 			return new GridLayout(1,1)
 					.addPiece(new LabelWidgetGui("This Is A Placeholder!"), 0, 0, 1, 1);
 	}
