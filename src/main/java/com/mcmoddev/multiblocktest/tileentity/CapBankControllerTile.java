@@ -92,7 +92,10 @@ public class CapBankControllerTile extends MMDStandardTileEntity {
 		super.readFromNBT(compound);
 //		if (compound.hasKey("capacitor"))
 //			buffer.deserializeNBT(compound.getCompoundTag("capacitor"));
+		com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("this.getPos() == %s -- this.getWorld() == %s", this.getPos(), this.getWorld());
+		if (this.getWorld() == null) return;
 		MultiBlockCapacitorBank tempMB = new MultiBlockCapacitorBank(this.getPos(), this.getWorld());
-		if (tempMB.isValidMultiblock()) tempMB.form();
+		com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("is valid: %s", tempMB.isValidMultiblock(this.getWorld().getBlockState(this.getPos())));
+		if (tempMB.isValidMultiblock(this.getWorld().getBlockState(this.getPos()))) tempMB.form();
 	}
 }

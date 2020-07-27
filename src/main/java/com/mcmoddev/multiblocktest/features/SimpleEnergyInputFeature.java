@@ -46,7 +46,10 @@ public class SimpleEnergyInputFeature extends ForgeEnergyBatteryFeature implemen
 		if (core == null ) {
 			if (sourceT instanceof CapBankInputJackTile) {
 				CapBankControllerTile zz = ((CapBankInputJackTile)sourceT).getMasterComponent(); 
-				if (zz == null) return;
+				if (zz == null) {
+					com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("controller block null ?");
+					return;
+				}
 				else setCoreComponent(zz);
 				setDirty(FeatureDirtyLevel.LOAD);
 			}

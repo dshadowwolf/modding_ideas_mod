@@ -29,7 +29,7 @@ public class SimpleEnergyOutputFeature extends ForgeEnergyBatteryFeature impleme
 	}
 	
 	public void setCoreComponent(CapBankControllerTile central) {
-		core = central;
+		this.core = central;
 	}
 
 	@Nullable
@@ -46,7 +46,10 @@ public class SimpleEnergyOutputFeature extends ForgeEnergyBatteryFeature impleme
 		if (core == null ) {
 			if (sourceT instanceof CapBankOutputJackTile) {
 				CapBankControllerTile zz = ((CapBankOutputJackTile)sourceT).getMasterComponent(); 
-				if (zz == null) return;
+				if (zz == null) {
+					com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("controller block null ?");
+					return;
+				}
 				else setCoreComponent(zz);
 				setDirty(FeatureDirtyLevel.LOAD);
 			}

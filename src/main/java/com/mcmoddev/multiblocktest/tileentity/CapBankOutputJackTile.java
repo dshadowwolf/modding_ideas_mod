@@ -18,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 public class CapBankOutputJackTile extends MMDStandardTileEntity implements ICapacitorComponent {
 	private CapBankControllerTile mainComponent;
 	private final ForgeEnergyStorage buffer;
+	private BlockPos mainComponentPosition;
 	
 	public CapBankOutputJackTile() {
 		this(CapBankControllerTile.DEFAULT_TRANS_RATE);
@@ -25,6 +26,7 @@ public class CapBankOutputJackTile extends MMDStandardTileEntity implements ICap
 	
 	protected CapBankOutputJackTile(final int rate) {
 		buffer = this.addFeature(new SimpleEnergyOutputFeature("battery", mainComponent, this)).getEnergyStorage();
+		mainComponentPosition = getPos();
 	}
 	
 	public final ForgeEnergyStorage getStorage() {
@@ -56,18 +58,43 @@ public class CapBankOutputJackTile extends MMDStandardTileEntity implements ICap
 		if (!compound.hasKey("mb_controller_cap")) return;
 		long delta = compound.getLong("mb_controller_cap");
 		BlockPos p = BlockPos.fromLong(delta);
-		TileEntity te = world.getTileEntity(p);
+		com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("Pos p (%s) from %d", p, delta);
+		this.mainComponentPosition = p;
+		if (this.getWorld() == null) return;
+		if (!this.getWorld().isRemote) {
+			com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("Server World!");
+			return;
+		}
+
+		TileEntity te = this.getWorld().getTileEntity(p);
 		if (te != null && te instanceof CapBankControllerTile) setMasterComponent((CapBankControllerTile)te);
 	}
 	
 	@Override
 	public CapBankControllerTile getMasterComponent() {
+		com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("%s.getMasterComponent -> %s", this.getClass().getCanonicalName(), mainComponent);
+		if ((mainComponent == null || mainComponentPosition == getPos()) && !mainComponentPosition.equals(new BlockPos(0,0,0))) {
+			com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("Trying to get main component fresh - pos: %s - world %s", this.mainComponentPosition, this.getWorld());
+			if (this.getWorld() == null) {
+				return null;
+			}
+			CapBankControllerTile t = (CapBankControllerTile)this.getWorld().getTileEntity(this.mainComponentPosition);
+			com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("got TE --> %s (%s)", t, this.getWorld().getBlockState(this.mainComponentPosition));
+			setMasterComponent(t);
+			return t;
+		}
 		return mainComponent;
 	}
 
 	@Override
 	public void setMasterComponent(CapBankControllerTile master) {
+		if (master == null) return;
+		if (!master.getPos().equals(new BlockPos(0,0,0))) {
+			mainComponentPosition = master.getPos();
+		}
 		mainComponent = master;
+		com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("setMasterComponent -> %s", master);
+		((SimpleEnergyOutputFeature)getFeature("battery")).setCoreComponent(master);
 	}
 
 }
