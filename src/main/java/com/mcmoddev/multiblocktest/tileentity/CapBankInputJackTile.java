@@ -52,11 +52,9 @@ public class CapBankInputJackTile extends MMDStandardTileEntity implements ICapa
 		if (!compound.hasKey("mb_controller_cap")) return;
 		long delta = compound.getLong("mb_controller_cap");
 		BlockPos p = BlockPos.fromLong(delta);
-		com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("Pos p (%s) from %d", p, delta);
 		this.mainComponentPosition = p;
 		if (this.getWorld() == null) return;
 		if (!this.getWorld().isRemote) {
-			com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("Server World!");
 			return;
 		}
 		TileEntity te = this.getWorld().getTileEntity(p);
@@ -65,14 +63,11 @@ public class CapBankInputJackTile extends MMDStandardTileEntity implements ICapa
 	
 	@Override
 	public CapBankControllerTile getMasterComponent() {
-		com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("%s.getMasterComponent -> %s", this.getClass().getCanonicalName(), mainComponent);
 		if ((mainComponent == null || mainComponentPosition == getPos()) && !mainComponentPosition.equals(new BlockPos(0,0,0))) {
-			com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("Trying to get main component fresh - pos: %s - world %s", this.mainComponentPosition, this.getWorld());
 			if (this.getWorld() == null) {
 				return null;
 			}
 			CapBankControllerTile t = (CapBankControllerTile)this.getWorld().getTileEntity(this.mainComponentPosition);
-			com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("got TE --> %s (%s)", t, this.getWorld().getBlockState(this.mainComponentPosition));
 			setMasterComponent(t);
 			return t;
 		}
@@ -84,7 +79,6 @@ public class CapBankInputJackTile extends MMDStandardTileEntity implements ICapa
 		if (master == null) return;
 		this.mainComponentPosition = master.getPos();
 		mainComponent = master;
-		com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("setMasterComponent -> %s", master);
 		((SimpleEnergyInputFeature)getFeature("battery")).setCoreComponent(master);
 	}
 
