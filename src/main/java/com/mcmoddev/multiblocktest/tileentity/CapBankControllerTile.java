@@ -7,12 +7,10 @@ import com.mcmoddev.lib.container.gui.LabelWidgetGui;
 import com.mcmoddev.lib.container.gui.layout.GridLayout;
 import com.mcmoddev.lib.container.gui.layout.SinglePieceWrapper;
 import com.mcmoddev.lib.energy.ForgeEnergyStorage;
+import com.mcmoddev.lib.feature.ForgeEnergyBatteryFeature;
 import com.mcmoddev.lib.tile.MMDStandardTileEntity;
-import com.mcmoddev.multiblocktest.features.SimpleEnergyStorageFeature;
 import com.mcmoddev.multiblocktest.util.MultiBlockTestConfig;
 import com.mcmoddev.multiblocktest.util.SharedStrings;
-
-import net.minecraft.util.EnumFacing;
 
 public class CapBankControllerTile extends MMDStandardTileEntity {
 	public static final int DEFAULT_CAPACITY = MultiBlockTestConfig.config_values.get(SharedStrings.CAPACITY).get(SharedStrings.BANK);
@@ -40,26 +38,14 @@ public class CapBankControllerTile extends MMDStandardTileEntity {
     
     protected CapBankControllerTile(final int capacity, final int receiveRate, final int sendRate) {
     	super();
-    	SimpleEnergyStorageFeature k = new SimpleEnergyStorageFeature("battery", 0, capacity, receiveRate, sendRate);
-    	k.addActiveFacings(EnumFacing.UP);
-        this.buffer = this.addFeature(k).getEnergyStorage();
+    	
+        this.buffer = this.addFeature(new ForgeEnergyBatteryFeature("battery", 0, capacity, receiveRate, sendRate)).getEnergyStorage();
     }
     
     public final ForgeEnergyStorage getStorage() {
     	return buffer;
     }
-    
-    public final int store(final int amount, boolean simulate) {
-    	this.markDirty();
-    	return buffer.store(amount, simulate);
-    }
-    
-    public final int take(final int amount, boolean simulate) {
-    	this.markDirty();
-    	((SimpleEnergyStorageFeature)(this.getTypedFeature(SimpleEnergyStorageFeature.class, "battery"))).dirty();
-    	return buffer.take(amount, simulate);
-    }
-    
+
     protected final IWidgetGui getMainContentWidgetGui(final GuiContext context) {
         return new GridLayout(9, 1)
             .addPiece(new FeatureWrapperGui(context, this, "battery"), 0, 0, 1, 1)

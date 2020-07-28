@@ -20,7 +20,7 @@ public class CapBankInputJackTile extends MMDStandardTileEntity implements ICapa
 	}
 	
 	protected CapBankInputJackTile(final int rate) {
-		this.addFeature(new SimpleEnergyInputFeature("battery", mainComponent, this));
+		this.addFeature(new SimpleEnergyInputFeature("transfer", mainComponent, this));
 	}
 	
 	@Override
