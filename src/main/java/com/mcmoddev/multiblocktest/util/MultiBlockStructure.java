@@ -202,7 +202,8 @@ public abstract class MultiBlockStructure implements IMultiBlockStructure {
         {
             BlockPos next = remainingCandidates.remove();
             visited.add(next);
-            if (next == origin || validBlocks.contains(world.getBlockState(next)))
+            IBlockState nxS = world.getBlockState(next);
+            if (nxS != null && (next == origin || validBlocks.contains(nxS)))
             {
             	//com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.info("%s == %s == %s or validBlocks.contains(%s) == %s", next, origin, next == origin, world.getBlockState(next), validBlocks.contains(world.getBlockState(next)));
                 min.setPos(
