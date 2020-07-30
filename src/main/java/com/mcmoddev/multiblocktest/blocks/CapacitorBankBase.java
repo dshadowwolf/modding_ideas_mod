@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class CapacitorBankBase extends MMDBlockWithTile<TileCapacitorBase> {
 	public CapacitorBankBase(Material material) {
-		super(TileCapacitorBase.class, TileCapacitorBase::new, material);
+		super(TileCapacitorBase.class, () -> new TileCapacitorBase(), material);
 		setTranslationKey(MultiBlockTest.MODID + "." + "basic_capacitor_bank");
 		setRegistryName(new ResourceLocation(MultiBlockTest.MODID, "capacitor_bank"));
 	}

@@ -15,6 +15,8 @@ import com.mcmoddev.multiblocktest.structures.MultiBlockCapacitorBank;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /*
  * Something is borked somewhere in here, but damned if I know what - perhaps its actually over in the features logic ?
@@ -65,12 +67,14 @@ public class CapBankControllerTile extends MMDStandardTileEntity {
     	return buffer.take(amount, simulate);
     }
     
+    @SideOnly(Side.CLIENT)
     protected final IWidgetGui getMainContentWidgetGui(final GuiContext context) {
         return new GridLayout(9, 1)
             .addPiece(new FeatureWrapperGui(context, this, "battery"), 0, 0, 1, 1)
             .addPiece(new SinglePieceWrapper(this.getContentWidgetGui(context)), 1, 0, 8, 1);
     }
-
+    
+    @SideOnly(Side.CLIENT)
 	public IWidgetGui getContentWidgetGui(final GuiContext context) {
         return new GridLayout(1, 5)
                 .addPiece(new LabelWidgetGui("This Is A Placeholder"), 0, 0, 1, 1)
@@ -92,10 +96,8 @@ public class CapBankControllerTile extends MMDStandardTileEntity {
 		super.readFromNBT(compound);
 //		if (compound.hasKey("capacitor"))
 //			buffer.deserializeNBT(compound.getCompoundTag("capacitor"));
-		com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("this.getPos() == %s -- this.getWorld() == %s", this.getPos(), this.getWorld());
 		if (this.getWorld() == null) return;
 		MultiBlockCapacitorBank tempMB = new MultiBlockCapacitorBank(this.getPos(), this.getWorld());
-		com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("is valid: %s", tempMB.isValidMultiblock(this.getWorld().getBlockState(this.getPos())));
 		if (tempMB.isValidMultiblock(this.getWorld().getBlockState(this.getPos()))) tempMB.form();
 	}
 }

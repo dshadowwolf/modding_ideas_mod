@@ -80,8 +80,9 @@ public class CapBankController extends MMDBlockWithTile<CapBankControllerTile> {
     
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase living, ItemStack stack) {
-		tryForm(world, pos, living);
 		super.onBlockPlacedBy(world, pos, state, living, stack);
+		tryForm(world, pos, living);
+		
 	}
 
 	@Override
