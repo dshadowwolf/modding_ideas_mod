@@ -52,7 +52,7 @@ public class SimpleCreativeCapacitorFeature extends ForgeEnergyBatteryFeature im
 				IEnergyStorage tCap = (IEnergyStorage) target.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite());
 				doInteraction(target, tCap);
 				int maxTake = tCap.extractEnergy(Integer.MAX_VALUE, true);
-				target.getCapability(CapabilityEnergy.ENERGY, facing).extractEnergy(maxTake, false);
+				tCap.extractEnergy(maxTake, false);
 			}
 		}
 	}

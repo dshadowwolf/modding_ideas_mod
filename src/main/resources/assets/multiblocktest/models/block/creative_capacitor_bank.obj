@@ -1,6 +1,6 @@
 # Rhino
 
-mtllib massive_capacitor_bank.mtl
+mtllib creative_capacitor_bank.mtl
 o object_8
 usemtl Capacitor
 v 0.7375 0.125 0.668
