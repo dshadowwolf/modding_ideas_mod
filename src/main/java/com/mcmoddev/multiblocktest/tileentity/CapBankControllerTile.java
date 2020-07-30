@@ -7,20 +7,16 @@ import com.mcmoddev.lib.container.gui.LabelWidgetGui;
 import com.mcmoddev.lib.container.gui.layout.GridLayout;
 import com.mcmoddev.lib.container.gui.layout.SinglePieceWrapper;
 import com.mcmoddev.lib.energy.ForgeEnergyStorage;
+import com.mcmoddev.lib.feature.ForgeEnergyBatteryFeature;
 import com.mcmoddev.lib.tile.MMDStandardTileEntity;
-import com.mcmoddev.multiblocktest.features.SimpleEnergyStorageFeature;
+import com.mcmoddev.multiblocktest.structures.MultiBlockCapacitorBank;
 import com.mcmoddev.multiblocktest.util.MultiBlockTestConfig;
 import com.mcmoddev.multiblocktest.util.SharedStrings;
-import com.mcmoddev.multiblocktest.structures.MultiBlockCapacitorBank;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/*
- * Something is borked somewhere in here, but damned if I know what - perhaps its actually over in the features logic ?
- */
 public class CapBankControllerTile extends MMDStandardTileEntity {
 	public static final int DEFAULT_CAPACITY = MultiBlockTestConfig.config_values.get(SharedStrings.CAPACITY).get(SharedStrings.BANK);
 	public static final int DEFAULT_RECV_RATE = MultiBlockTestConfig.config_values.get(SharedStrings.RECEIVE).get(SharedStrings.BANK);
@@ -47,24 +43,12 @@ public class CapBankControllerTile extends MMDStandardTileEntity {
     
     protected CapBankControllerTile(final int capacity, final int receiveRate, final int sendRate) {
     	super();
-    	SimpleEnergyStorageFeature k = new SimpleEnergyStorageFeature("battery", 0, capacity, receiveRate, sendRate);
-    	k.addActiveFacings(EnumFacing.UP);
-        this.buffer = this.addFeature(k).getEnergyStorage();
+    	
+        this.buffer = this.addFeature(new ForgeEnergyBatteryFeature("battery", 0, capacity, receiveRate, sendRate)).getEnergyStorage();
     }
     
     public final ForgeEnergyStorage getStorage() {
     	return buffer;
-    }
-    
-    public final int store(final int amount, boolean simulate) {
-    	this.markDirty();
-    	return buffer.store(amount, simulate);
-    }
-    
-    public final int take(final int amount, boolean simulate) {
-    	this.markDirty();
-    	((SimpleEnergyStorageFeature)(this.getTypedFeature(SimpleEnergyStorageFeature.class, "battery"))).dirty();
-    	return buffer.take(amount, simulate);
     }
     
     @SideOnly(Side.CLIENT)
@@ -87,15 +71,12 @@ public class CapBankControllerTile extends MMDStandardTileEntity {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		NBTTagCompound temp = super.writeToNBT(nbt);
-//		temp.setTag("capacitor", buffer.serializeNBT());
 		return temp;
 	}
 	
 	@Override
     public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-//		if (compound.hasKey("capacitor"))
-//			buffer.deserializeNBT(compound.getCompoundTag("capacitor"));
 		if (this.getWorld() == null) return;
 		MultiBlockCapacitorBank tempMB = new MultiBlockCapacitorBank(this.getPos(), this.getWorld());
 		if (tempMB.isValidMultiblock(this.getWorld().getBlockState(this.getPos()))) tempMB.form();
