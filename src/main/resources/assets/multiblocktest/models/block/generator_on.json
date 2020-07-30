@@ -1,0 +1,8 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "multiblocktest:blocks/cap_bank_component_side",
+        "front": "multiblocktest:blocks/generator_front_on",
+        "side": "multiblocktest:blocks/cap_bank_component_side"
+    }
+}
