@@ -9,8 +9,13 @@ import com.mcmoddev.lib.container.gui.layout.SinglePieceWrapper;
 import com.mcmoddev.lib.energy.ForgeEnergyStorage;
 import com.mcmoddev.lib.feature.ForgeEnergyBatteryFeature;
 import com.mcmoddev.lib.tile.MMDStandardTileEntity;
+import com.mcmoddev.multiblocktest.structures.MultiBlockCapacitorBank;
 import com.mcmoddev.multiblocktest.util.MultiBlockTestConfig;
 import com.mcmoddev.multiblocktest.util.SharedStrings;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class CapBankControllerTile extends MMDStandardTileEntity {
 	public static final int DEFAULT_CAPACITY = MultiBlockTestConfig.config_values.get(SharedStrings.CAPACITY).get(SharedStrings.BANK);
@@ -45,13 +50,15 @@ public class CapBankControllerTile extends MMDStandardTileEntity {
     public final ForgeEnergyStorage getStorage() {
     	return buffer;
     }
-
+    
+    @SideOnly(Side.CLIENT)
     protected final IWidgetGui getMainContentWidgetGui(final GuiContext context) {
         return new GridLayout(9, 1)
             .addPiece(new FeatureWrapperGui(context, this, "battery"), 0, 0, 1, 1)
             .addPiece(new SinglePieceWrapper(this.getContentWidgetGui(context)), 1, 0, 8, 1);
     }
-
+    
+    @SideOnly(Side.CLIENT)
 	public IWidgetGui getContentWidgetGui(final GuiContext context) {
         return new GridLayout(1, 5)
                 .addPiece(new LabelWidgetGui("This Is A Placeholder"), 0, 0, 1, 1)
@@ -59,5 +66,19 @@ public class CapBankControllerTile extends MMDStandardTileEntity {
                 .addPiece(new LabelWidgetGui(String.format("Max Output Rate: %d FE/t", buffer.getOutputRate())), 0, 2, 1, 1)
                 .addPiece(new LabelWidgetGui(String.format("Max Storage: %d FE", buffer.getCapacity())), 0, 3, 1, 1)
                 .addPiece(new LabelWidgetGui(String.format("Current Storage: %d FE", buffer.getStored())), 0,  4, 1, 1);
+	}
+	
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		NBTTagCompound temp = super.writeToNBT(nbt);
+		return temp;
+	}
+	
+	@Override
+    public void readFromNBT(NBTTagCompound compound) {
+		super.readFromNBT(compound);
+		if (this.getWorld() == null) return;
+		MultiBlockCapacitorBank tempMB = new MultiBlockCapacitorBank(this.getPos(), this.getWorld());
+		if (tempMB.isValidMultiblock(this.getWorld().getBlockState(this.getPos()))) tempMB.form();
 	}
 }

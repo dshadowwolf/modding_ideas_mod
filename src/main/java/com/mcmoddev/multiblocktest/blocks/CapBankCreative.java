@@ -1,0 +1,27 @@
+package com.mcmoddev.multiblocktest.blocks;
+
+import com.mcmoddev.lib.block.MMDBlockWithTile;
+import com.mcmoddev.multiblocktest.MultiBlockTest;
+import com.mcmoddev.multiblocktest.tileentity.TileCapacitorCreative;
+
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
+
+public class CapBankCreative extends MMDBlockWithTile<TileCapacitorCreative> {
+	public CapBankCreative(Material material) {
+		super(TileCapacitorCreative.class, () -> new TileCapacitorCreative(), material);
+		setTranslationKey(MultiBlockTest.MODID + "." + "creative_capacitor_bank");
+		setRegistryName(new ResourceLocation(MultiBlockTest.MODID, "creative_capacitor_bank"));
+	}
+	
+	@Override
+	public boolean isFullCube(IBlockState blockStateIn) {
+		return false; 
+	}
+	
+	@Override
+	public boolean isOpaqueCube(IBlockState blockStateIn) {
+		return false;
+	}
+}

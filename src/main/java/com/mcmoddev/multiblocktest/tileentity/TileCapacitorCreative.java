@@ -7,7 +7,7 @@ import com.mcmoddev.lib.container.gui.LabelWidgetGui;
 import com.mcmoddev.lib.container.gui.layout.GridLayout;
 import com.mcmoddev.lib.container.gui.layout.SinglePieceWrapper;
 import com.mcmoddev.lib.tile.MMDStandardTileEntity;
-import com.mcmoddev.multiblocktest.features.SimpleCapacitorFeature;
+import com.mcmoddev.multiblocktest.features.SimpleCreativeCapacitorFeature;
 import com.mcmoddev.multiblocktest.util.MultiBlockTestConfig;
 import com.mcmoddev.multiblocktest.util.SharedStrings;
 
@@ -16,28 +16,28 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.mcmoddev.lib.energy.ForgeEnergyStorage;
 
-public class TileCapacitorBase extends MMDStandardTileEntity {
+public class TileCapacitorCreative extends MMDStandardTileEntity {
 	public static final int DEFAULT_CAPACITY = MultiBlockTestConfig.config_values.get(SharedStrings.CAPACITY).get(SharedStrings.BASE);
 	public static final int DEFAULT_RECV_RATE = MultiBlockTestConfig.config_values.get(SharedStrings.RECEIVE).get(SharedStrings.BASE);
 	public static final int DEFAULT_TRANS_RATE = MultiBlockTestConfig.config_values.get(SharedStrings.TRANSMIT).get(SharedStrings.BASE);
 	protected final ForgeEnergyStorage buffer;
 	
-	public TileCapacitorBase() {
+	public TileCapacitorCreative() {
 		this(DEFAULT_CAPACITY);
 	}
 	
-	public TileCapacitorBase(final int capacity) {
+	public TileCapacitorCreative(final int capacity) {
 		this(capacity, DEFAULT_TRANS_RATE);
 	}
 	
-	public TileCapacitorBase(final int capacity, final int iorate) {
+	public TileCapacitorCreative(final int capacity, final int iorate) {
 		this(capacity, iorate, iorate);
 	}
 	
-	public TileCapacitorBase(final int capacity, final int inputRate, final int outputRate) {
+	public TileCapacitorCreative(final int capacity, final int inputRate, final int outputRate) {
 		super();
 		
-		this.buffer = this.addFeature(new SimpleCapacitorFeature("battery", 0, capacity, inputRate, outputRate, this))
+		this.buffer = this.addFeature(new SimpleCreativeCapacitorFeature("battery", this))
 				.getEnergyStorage();
 	}
 	
