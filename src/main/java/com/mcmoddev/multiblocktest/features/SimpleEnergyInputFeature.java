@@ -65,16 +65,12 @@ public class SimpleEnergyInputFeature extends ForgeEnergyBatteryFeature implemen
 			TileEntity target = getAdjacentTE(facing);
 			if(target != null && target.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
 				if (buffer.canStore()) {
-					com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("Sanity Check: capacity %dFE :: Input Rate %d FE/t :: Output Rate: %d FE/t", buffer.getCapacity(), buffer.getInputRate(), buffer.getOutputRate());
 					int maxValue = buffer.getInputRate();
 					int canStore = buffer.store(maxValue, false);
 					int storeThis = canStore > maxValue?maxValue:canStore;
 					int canExtract = target.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite()).extractEnergy(storeThis, true);
 					int ready = canExtract < storeThis ? canExtract : storeThis;
 					buffer.store(target.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite()).extractEnergy(ready, false), true);
-					com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("Tried to input %d (of possible %d) from TE at %s", ready, canExtract, target.getPos());
-					com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("storeThis: %d -- canStore: %d -- canExtract: %d", storeThis, canStore, canExtract);
-					com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("maxValue: %d -- canStore: %d -- storeThis: %d -- canExtract: %d -- ready: %d", maxValue, canStore, storeThis, canExtract, ready);
 				}
 			}
 		}
@@ -88,7 +84,6 @@ public class SimpleEnergyInputFeature extends ForgeEnergyBatteryFeature implemen
 				int transferAmount = buffer.getStored() < rate ? buffer.getStored() : rate;
 				int toTransferBase = controller.store(transferAmount, false);
 				int toTransferFinal = buffer.take(toTransferBase, false);
-				com.mcmoddev.multiblocktest.MultiBlockTest.LOGGER.fatal("Tried to transfer %d to core storage (rate %d - avail %d - amount %d)", toTransferFinal, rate, buffer.getStored(), transferAmount);				
 				buffer.take(toTransferFinal, true);
 				controller.store(toTransferFinal, true);
 			}
